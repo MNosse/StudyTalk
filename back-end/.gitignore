@@ -1,0 +1,19 @@
+# Gradle Wrapper
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+
+# Spring Boot
+target/
+build/
+*.jar
+*.war
+*.ear
+
+# Gradle cache
+.gradle/
+
+# Ignore compiled files
+*.class

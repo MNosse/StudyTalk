@@ -1,0 +1,49 @@
+# Gradle Wrapper
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+
+# Gradle generated files
+.gradle/
+/build/
+
+# Compiled Kotlin files
+*.class
+
+# Local configuration file (sdk.dir)
+local.properties
+
+# Android Studio generated files
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+
+# User-specific Android Studio files
+*.idea/misc.xml
+/.idea/modules.xml
+
+# Android profiling files
+*.hprof
+*.hprof-capture
+
+# Android Studio CMake temp files
+cmake/
+
+# Android Studio NDK temp files
+.cxx/
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild/
+
+# Android Studio emulator files
+*.log
+*.swp
+*.dmp
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+/captures/
