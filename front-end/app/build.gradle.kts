@@ -46,7 +46,7 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST,io.netty.versions.properties}"
         }
     }
 }
@@ -55,6 +55,7 @@ dependencies {
     val coroutineVersion = "1.7.3"
     val hiltVersion = "2.47"
     val roomVersion = "2.5.2"
+    val ktorVersion = "2.3.3"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -100,13 +101,16 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
 
-    //RETROFIT
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-
     //FIREBASE
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     // Firebase Authentication
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    //KTOR
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-status-pages-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
 }
 
 kapt {
