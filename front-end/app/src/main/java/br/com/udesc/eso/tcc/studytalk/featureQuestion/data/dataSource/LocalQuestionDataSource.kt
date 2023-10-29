@@ -12,6 +12,9 @@ interface LocalQuestionDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(questionRoomEntity: QuestionRoomEntity)
 
+    @Query("DELETE FROM question WHERE id = :id")
+    fun deleteById(id: Long)
+
     @Query(
         "SELECT * FROM question WHERE " +
                 "(SELECT CASE WHEN EXISTS (SELECT 1 FROM participant WHERE uid = :participantUid) THEN 1 ELSE 0 END) = 1 " +
@@ -21,6 +24,9 @@ interface LocalQuestionDataSource {
         id: Long,
         participantUid: String
     ): MutableList<QuestionRoomEntity>
+
+    @Query ("SELECT id FROM question")
+    suspend fun getAllIds(): MutableList<Long>
 
     @Query(
         "SELECT * FROM question WHERE " +

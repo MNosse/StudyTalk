@@ -12,8 +12,14 @@ interface LocalParticipantDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(participantRoomEntity: ParticipantRoomEntity)
 
+    @Query("DELETE FROM participant WHERE id = :id")
+    fun deleteById(id: Long)
+
     @Query("SELECT * FROM participant WHERE (SELECT CASE WHEN EXISTS (SELECT 1 FROM administrator WHERE uid = :administratorUid) THEN 1 ELSE 0 END) = 1")
     suspend fun getAll(administratorUid: String): MutableList<ParticipantRoomEntity>
+
+    @Query ("SELECT id FROM participant")
+    suspend fun getAllIds(): MutableList<Long>
 
     @Query(
         "SELECT * FROM participant WHERE " +

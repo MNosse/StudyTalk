@@ -12,6 +12,12 @@ interface LocalAdministratorDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(administratorRoomEntity: AdministratorRoomEntity)
 
+    @Query("DELETE FROM administrator WHERE id = :id")
+    fun deleteById(id: Long)
+
+    @Query ("SELECT id FROM administrator")
+    suspend fun getAllIds(): MutableList<Long>
+
     @Query("SELECT * FROM administrator WHERE uid = :uid")
     suspend fun getByUid(uid: String): AdministratorRoomEntity?
 

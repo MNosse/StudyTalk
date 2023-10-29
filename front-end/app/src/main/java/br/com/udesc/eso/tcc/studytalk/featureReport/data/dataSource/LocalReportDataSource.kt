@@ -13,6 +13,12 @@ interface LocalReportDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(reportRoomEntity: ReportRoomEntity)
 
+    @Query("DELETE FROM report WHERE id = :id")
+    fun deleteById(id: Long)
+
+    @Query ("SELECT id FROM report")
+    suspend fun getAllIds(): MutableList<Long>
+
     @Query(
         "SELECT * FROM report WHERE " +
                 "(SELECT CASE WHEN EXISTS (SELECT 1 FROM participant WHERE uid = :requestingParticipantUid) THEN 1 ELSE 0 END) = 1 " +

@@ -12,8 +12,14 @@ interface LocalInstitutionDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(institutionRoomEntity: InstitutionRoomEntity)
 
+    @Query("DELETE FROM institution WHERE id = :id")
+    fun deleteById(id: Long)
+
     @Query("SELECT * FROM institution WHERE (SELECT CASE WHEN EXISTS (SELECT 1 FROM administrator WHERE uid = :administratorUid) THEN 1 ELSE 0 END) = 1")
     suspend fun getAll(administratorUid: String): MutableList<InstitutionRoomEntity>
+
+    @Query ("SELECT id FROM institution")
+    suspend fun getAllIds(): MutableList<Long>
 
     @Query(
         "SELECT * FROM institution WHERE " +
