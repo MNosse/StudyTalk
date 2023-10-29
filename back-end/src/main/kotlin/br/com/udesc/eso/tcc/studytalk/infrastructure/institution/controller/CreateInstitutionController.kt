@@ -2,6 +2,8 @@ package br.com.udesc.eso.tcc.studytalk.infrastructure.institution.controller
 
 import br.com.udesc.eso.tcc.studytalk.core.infrastructure.controller.BaseController
 import br.com.udesc.eso.tcc.studytalk.entity.administrator.exception.AdministratorNotFoundException
+import br.com.udesc.eso.tcc.studytalk.infrastructure.institution.controller.converter.convert
+import br.com.udesc.eso.tcc.studytalk.infrastructure.institution.controller.response.Response
 import br.com.udesc.eso.tcc.studytalk.useCase.institution.CreateInstitutionUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -17,12 +19,14 @@ class CreateInstitutionController(private val createInstitutionUseCase: CreateIn
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @Throws(AdministratorNotFoundException::class)
-    fun createInstitution(@Valid @RequestBody request: Request) {
-        createInstitutionUseCase.execute(
-            CreateInstitutionUseCase.Input(
-                administratorUid = request.administratorUid,
-                name = request.name
-            )
+    fun createInstitution(@Valid @RequestBody request: Request): Response {
+        return convert(
+            createInstitutionUseCase.execute(
+                CreateInstitutionUseCase.Input(
+                    administratorUid = request.administratorUid,
+                    name = request.name
+                )
+            ).institution
         )
     }
 

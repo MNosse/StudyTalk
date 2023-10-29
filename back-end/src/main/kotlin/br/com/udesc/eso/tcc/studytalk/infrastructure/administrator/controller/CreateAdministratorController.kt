@@ -1,6 +1,8 @@
 package br.com.udesc.eso.tcc.studytalk.infrastructure.administrator.controller
 
 import br.com.udesc.eso.tcc.studytalk.core.infrastructure.controller.BaseController
+import br.com.udesc.eso.tcc.studytalk.infrastructure.administrator.controller.converter.convert
+import br.com.udesc.eso.tcc.studytalk.infrastructure.administrator.controller.response.Response
 import br.com.udesc.eso.tcc.studytalk.useCase.administrador.CreateAdministratorUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.*
 class CreateAdministratorController(private val createAdministratorUseCase: CreateAdministratorUseCase) : BaseController() {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createAdministrator(@Valid @RequestBody request: Request) {
-        createAdministratorUseCase.execute(CreateAdministratorUseCase.Input(request.uid))
+    fun createAdministrator(@Valid @RequestBody request: Request): Response {
+        return convert(createAdministratorUseCase.execute(CreateAdministratorUseCase.Input(request.uid)).administrator)
     }
 
     data class Request(

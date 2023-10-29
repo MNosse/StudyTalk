@@ -3,6 +3,8 @@ package br.com.udesc.eso.tcc.studytalk.infrastructure.participant.controller
 import br.com.udesc.eso.tcc.studytalk.core.infrastructure.controller.BaseController
 import br.com.udesc.eso.tcc.studytalk.entity.participant.exception.ParticipantNotFoundException
 import br.com.udesc.eso.tcc.studytalk.entity.question.exception.QuestionNotFoundException
+import br.com.udesc.eso.tcc.studytalk.infrastructure.answer.controller.converter.convert
+import br.com.udesc.eso.tcc.studytalk.infrastructure.answer.controller.response.Response
 import br.com.udesc.eso.tcc.studytalk.useCase.participant.AnswerAQuestionUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -15,20 +17,22 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/participants")
 @Validated
 class AnswerAQuestionController(private val answerAQuestionUseCase: AnswerAQuestionUseCase) : BaseController() {
-    @PostMapping("/{participantUid}/questions/{questionId}/answers")
+    @PostMapping("/{participantUid}/questions/{questionId}/answers/")
     @ResponseStatus(HttpStatus.CREATED)
     @Throws(ParticipantNotFoundException::class, QuestionNotFoundException::class)
     fun answerAQuestion(
         @PathVariable participantUid: String,
         @PathVariable questionId: Long,
         @Valid @RequestBody request: Request
-    ) {
-        answerAQuestionUseCase.execute(
-            AnswerAQuestionUseCase.Input(
-                participantUid = participantUid,
-                questionId = questionId,
-                description = request.description
-            )
+    ): Response {
+        return convert(
+            answerAQuestionUseCase.execute(
+                AnswerAQuestionUseCase.Input(
+                    participantUid = participantUid,
+                    questionId = questionId,
+                    description = request.description
+                )
+            ).answer
         )
     }
 

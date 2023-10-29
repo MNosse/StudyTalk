@@ -2,8 +2,10 @@ package br.com.udesc.eso.tcc.studytalk.infrastructure.participant.gateway
 
 import br.com.udesc.eso.tcc.studytalk.core.enums.Privilege
 import br.com.udesc.eso.tcc.studytalk.core.enums.Subject
+import br.com.udesc.eso.tcc.studytalk.entity.answer.model.Answer
 import br.com.udesc.eso.tcc.studytalk.entity.participant.gateway.ParticipantGateway
 import br.com.udesc.eso.tcc.studytalk.entity.participant.model.Participant
+import br.com.udesc.eso.tcc.studytalk.entity.question.model.Question
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.answer.AnswerRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.enrollmentRequest.EnrollmentRequestRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.institution.InstitutionRepository
@@ -25,14 +27,16 @@ class ParticipantDatabaseGateway(
     private val participantRepository: ParticipantRepository,
     private val questionRepository: QuestionRepository
 ) : ParticipantGateway {
-    override fun answerAQuestion(participantUid: String, questionId: Long, description: String) {
-        participantRepository.findByUid(participantUid)?.let { participant ->
+    override fun answerAQuestion(participantUid: String, questionId: Long, description: String): Answer? {
+        return participantRepository.findByUid(participantUid)?.let { participant ->
             questionRepository.findById(questionId).getOrNull()?.let {
-                answerRepository.save(
-                    AnswerSchema(
-                        description = description,
-                        question = it,
-                        participant = participant
+                convert(
+                    answerRepository.save(
+                        AnswerSchema(
+                            description = description,
+                            question = it,
+                            participant = participant
+                        )
                     )
                 )
             }
@@ -48,6 +52,7 @@ class ParticipantDatabaseGateway(
                         answerRepository.save(it)
                         participant.likedAnswers.removeIf { answer -> answer.id == it.id }
                     }
+
                     false -> {
                         it.likeCount++
                         answerRepository.save(it)
@@ -66,6 +71,7 @@ class ParticipantDatabaseGateway(
                     true -> {
                         participant.favoriteQuestions.removeIf { question -> question.id == it.id }
                     }
+
                     false -> {
                         participant.favoriteQuestions.add(it)
                     }
@@ -75,15 +81,20 @@ class ParticipantDatabaseGateway(
         }
     }
 
-    override fun create(registrationCode: String, uid: String, name: String) {
+    override fun create(registrationCode: String, uid: String, name: String): Participant? {
+        var participant: ParticipantSchema? = null
         institutionRepository.findByRegistrationCode(registrationCode)?.let {
-            val participant = participantRepository.save(ParticipantSchema(uid = uid, name = name))
+            participant = participantRepository.save(ParticipantSchema(uid = uid, name = name))
             enrollmentRequestRepository.save(
                 EnrollmentRequestSchema(
                     institution = it,
-                    participant = participant
+                    participant = participant!!
                 )
             )
+
+        }
+        return participant?.let {
+            convert(participant!!)
         }
     }
 
@@ -98,15 +109,17 @@ class ParticipantDatabaseGateway(
         title: String,
         description: String,
         subjects: MutableList<Subject>
-    ) {
-        participantRepository.findByUid(participantUid)?.let {
-            questionRepository.save(
-                QuestionSchema(
-                    title = title,
-                    description = description,
-                    subjects = subjects,
-                    participant = it,
-                    institution = it.institution!!
+    ): Question? {
+        return participantRepository.findByUid(participantUid)?.let {
+            convert(
+                questionRepository.save(
+                    QuestionSchema(
+                        title = title,
+                        description = description,
+                        subjects = subjects,
+                        participant = it,
+                        institution = it.institution!!
+                    )
                 )
             )
         }

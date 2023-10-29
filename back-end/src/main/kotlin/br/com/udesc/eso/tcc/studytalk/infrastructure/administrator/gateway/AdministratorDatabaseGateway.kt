@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 class AdministratorDatabaseGateway(private val administratorRepository: AdministratorRepository) :
     AdministratorGateway {
-    override fun create(uid: String) {
-        administratorRepository.save(AdministratorSchema(uid = uid))
+    override fun create(uid: String): Administrator {
+        return convert(administratorRepository.save(AdministratorSchema(uid = uid)))
     }
 
     override fun getByUid(uid: String): Administrator? {

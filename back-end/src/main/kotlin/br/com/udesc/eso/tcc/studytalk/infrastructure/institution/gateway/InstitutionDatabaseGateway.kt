@@ -10,8 +10,8 @@ import kotlin.jvm.optionals.getOrNull
 
 @Component
 class InstitutionDatabaseGateway(private val institutionRepository: InstitutionRepository) : InstitutionGateway {
-    override fun create(name: String) {
-        institutionRepository.save(InstitutionSchema(name = name))
+    override fun create(name: String): Institution {
+        return convert(institutionRepository.save(InstitutionSchema(name = name)))
     }
 
     override fun delete(id: Long) {

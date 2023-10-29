@@ -2,6 +2,8 @@ package br.com.udesc.eso.tcc.studytalk.infrastructure.participant.controller
 
 import br.com.udesc.eso.tcc.studytalk.core.infrastructure.controller.BaseController
 import br.com.udesc.eso.tcc.studytalk.entity.institution.exception.InstitutionNotFoundException
+import br.com.udesc.eso.tcc.studytalk.infrastructure.participant.controller.converter.convert
+import br.com.udesc.eso.tcc.studytalk.infrastructure.participant.controller.response.Response
 import br.com.udesc.eso.tcc.studytalk.useCase.participant.CreateParticipantUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -17,13 +19,15 @@ class CreateParticipantController(private val createParticipantUseCase: CreatePa
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @Throws(InstitutionNotFoundException::class)
-    fun createParticipant(@Valid @RequestBody request: Request) {
-        createParticipantUseCase.execute(
-            CreateParticipantUseCase.Input(
-                request.registrationCode,
-                request.uid,
-                request.name
-            )
+    fun createParticipant(@Valid @RequestBody request: Request): Response {
+        return convert(
+            createParticipantUseCase.execute(
+                CreateParticipantUseCase.Input(
+                    request.registrationCode,
+                    request.uid,
+                    request.name
+                )
+            ).participant
         )
     }
 

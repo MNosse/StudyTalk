@@ -7,7 +7,7 @@ import br.com.udesc.eso.tcc.studytalk.entity.participant.model.Participant
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Question(
+data class Question(
     val id: Long = 0L,
     var title: String,
     var description: String,

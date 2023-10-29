@@ -1,18 +1,18 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
     namespace = "com.example.studytalk"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.studytalk"
+        applicationId = "br.com.udesc.eso.tcc.studytalk"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -53,13 +53,15 @@ android {
 
 dependencies {
     val coroutineVersion = "1.7.3"
+    val daggerVersion = "2.47"
     val hiltVersion = "2.47"
+    val retrofitVersion = "2.9.0"
     val roomVersion = "2.5.2"
     val ktorVersion = "2.3.3"
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -75,25 +77,33 @@ dependencies {
 
     //COMPOSE DEPENDENCIES
     // Add core of material icons
-    implementation("androidx.compose.material:material-icons-core:1.4.3")
+    implementation("androidx.compose.material:material-icons-core:1.5.4")
     // Add full set of material icons
-    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
     // Add window size utils
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     // Integration with LiveData
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
     //COROUTINE
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
     kapt("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 
+    //DAGGER
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+
     //HILT
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    //RETROFIT
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
     //ROOM
     implementation("androidx.room:room-runtime:$roomVersion")

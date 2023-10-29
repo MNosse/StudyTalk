@@ -13,7 +13,7 @@ import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.report.Rep
 fun convert(reportSchema: ReportSchema): Report {
     return Report(
         id = reportSchema.id,
-        postable = convert(reportSchema.postable)!!,
+        postable = convert(reportSchema.postable),
         description = reportSchema.description,
         institution = convert(reportSchema.institution)
     )
