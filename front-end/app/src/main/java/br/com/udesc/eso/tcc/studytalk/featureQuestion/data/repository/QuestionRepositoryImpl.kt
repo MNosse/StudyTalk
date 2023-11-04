@@ -12,6 +12,7 @@ import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.model.QuestionApiMode
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.request.UpdateQuestionRequest
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.response.GetAllQuestionsResponse
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.model.Question
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.repository.QuestionRepository
 import retrofit2.Response
 import javax.inject.Inject
 

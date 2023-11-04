@@ -7,7 +7,7 @@ import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.Local
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.RemoteAdministratorDataSource
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.request.CreateAdministratorRequest
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.model.Administrator
-import dagger.hilt.android.AndroidEntryPoint
+import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.repository.AdministratorRepository
 import javax.inject.Inject
 
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/reports")
 class GetReportByIdController(private val getReportByIdUseCase: GetReportByIdUseCase) : BaseController() {
     @GetMapping("/{id}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(
         ParticipantNotFoundException::class,
         ParticipantWithoutPermissionException::class,

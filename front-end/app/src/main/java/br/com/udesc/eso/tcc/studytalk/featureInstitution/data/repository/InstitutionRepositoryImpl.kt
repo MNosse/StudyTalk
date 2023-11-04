@@ -10,6 +10,7 @@ import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.request.CreateInst
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.request.UpdateInstitutionRequest
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.response.GetAllInstitutionsResponse
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.model.Institution
+import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.repository.InstitutionRepository
 import retrofit2.Response
 import javax.inject.Inject
 

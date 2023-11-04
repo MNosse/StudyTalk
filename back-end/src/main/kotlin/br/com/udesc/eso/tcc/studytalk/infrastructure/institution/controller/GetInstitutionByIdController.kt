@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 class GetInstitutionByIdController(private val getInstitutionByIdUseCase: GetInstitutionByIdUseCase) :
     BaseController() {
     @GetMapping("/{id}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(
         AdministratorNotFoundException::class,
         InstitutionNotFoundException::class,

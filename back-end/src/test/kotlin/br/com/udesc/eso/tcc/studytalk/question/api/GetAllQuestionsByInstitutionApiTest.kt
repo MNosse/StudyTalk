@@ -91,7 +91,7 @@ class GetAllQuestionsByInstitutionApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .jsonPath()
             .getList("questions", Question::class.java)

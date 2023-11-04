@@ -89,7 +89,7 @@ class GetQuestionByIdApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .extract()
             .`as`(Question::class.java)

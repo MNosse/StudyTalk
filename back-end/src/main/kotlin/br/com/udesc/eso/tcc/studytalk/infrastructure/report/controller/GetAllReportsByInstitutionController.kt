@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class GetAllReportsByInstitutionController(private val getAllReportsByInstitutionUseCase: GetAllReportsByInstitutionUseCase) :
     BaseController() {
     @GetMapping("/{id}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(ParticipantNotFoundException::class, ParticipantWithoutPermissionException::class, ParticipantWithoutPrivilegeException::class)
     fun getAllReportsByInstitutionId(@PathVariable id: Long, @RequestParam(name = "requestingParticipantUid") requestingParticipantUid: String): Response {
         return Response(

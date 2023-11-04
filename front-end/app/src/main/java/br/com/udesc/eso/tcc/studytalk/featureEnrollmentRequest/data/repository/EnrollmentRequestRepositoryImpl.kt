@@ -8,6 +8,7 @@ import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.entity.Enrol
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.model.EnrollmentRequestApiModel
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.response.GetAllEnrollmentRequestiesResponse
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.model.EnrollmentRequest
+import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.repository.EnrollmentRequestRepository
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.LocalInstitutionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.dataSource.LocalParticipantDataSource
 import retrofit2.Response

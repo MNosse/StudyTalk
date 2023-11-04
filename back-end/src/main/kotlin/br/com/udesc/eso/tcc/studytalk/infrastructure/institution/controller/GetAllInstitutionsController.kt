@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/institutions")
 class GetAllInstitutionsController(private val getAllInstitutionsUseCase: GetAllInstitutionsUseCase) : BaseController() {
     @GetMapping("/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(AdministratorNotFoundException::class)
     fun getAllInstitutions(@RequestParam(name = "administratorUid") administratorUid: String): Response {
         return Response(

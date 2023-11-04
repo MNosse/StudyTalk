@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/participants")
 class GetAllParticipantsController(private val getAllParticipantsUseCase: GetAllParticipantsUseCase) : BaseController() {
     @GetMapping("/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(AdministratorNotFoundException::class)
     fun getAllParticipants(@RequestParam(name = "administratorUid") administratorUid: String): Response {
         return Response(

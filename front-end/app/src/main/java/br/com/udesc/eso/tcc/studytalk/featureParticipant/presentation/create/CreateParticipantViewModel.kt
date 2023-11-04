@@ -1,0 +1,12 @@
+package br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create
+
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class CreateParticipantViewModel @Inject constructor(
+
+) : ViewModel() {
+
+}

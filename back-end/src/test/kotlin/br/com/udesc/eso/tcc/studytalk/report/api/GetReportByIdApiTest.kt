@@ -122,7 +122,7 @@ class GetReportByIdApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Report::class.java)
 
@@ -141,7 +141,7 @@ class GetReportByIdApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Report::class.java)
 
@@ -160,7 +160,7 @@ class GetReportByIdApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Report::class.java)
 

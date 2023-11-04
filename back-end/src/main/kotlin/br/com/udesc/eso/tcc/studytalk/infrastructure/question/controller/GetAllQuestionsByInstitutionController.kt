@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/questions/institution")
 class GetAllQuestionsByInstitutionController(private val getAllQuestionsByInstitutionUseCase: GetAllQuestionsByInstitutionUseCase) : BaseController() {
     @GetMapping("/{id}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(ParticipantNotFoundException::class, ParticipantWithoutPermissionException::class)
     fun getAllQuestionsByInstitutionId(
         @PathVariable id: Long,

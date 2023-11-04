@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "325679001757",
+    "project_id": "studytalk-b5c47",
+    "storage_bucket": "studytalk-b5c47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325679001757:android:76d2a7cd6941801fc3e474",
+        "android_client_info": {
+          "package_name": "br.com.udesc.eso.tcc.studytalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqs-T-cpOGzAPY8aSPnaPIf-KJLicKqkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

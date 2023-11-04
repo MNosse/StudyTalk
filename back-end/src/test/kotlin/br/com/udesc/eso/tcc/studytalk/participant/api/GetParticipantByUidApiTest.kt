@@ -73,7 +73,7 @@ class GetParticipantByUidApiTest @Autowired constructor(
             .`when`()
             .get("/{participantToBeRetrievedUid}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Participant::class.java)
 
@@ -93,7 +93,7 @@ class GetParticipantByUidApiTest @Autowired constructor(
             .`when`()
             .get("/{participantToBeRetrievedUid}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Participant::class.java)
 
@@ -113,7 +113,7 @@ class GetParticipantByUidApiTest @Autowired constructor(
             .`when`()
             .get("/{participantToBeRetrievedUid}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .`as`(Participant::class.java)
 

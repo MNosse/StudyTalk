@@ -2,6 +2,10 @@ package br.com.udesc.eso.tcc.studytalk.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Purple200 = Color(0XFFBB86FC)
+val PurpleGrey200 = Color(0XFFC99AAE)
+val Pink200 = Color(0XFFFFC0CB)
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

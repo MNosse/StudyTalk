@@ -18,6 +18,7 @@ import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.request.UpdatePart
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.request.UpdateParticipantRequest
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.response.GetAllParticipantsResponse
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.model.Participant
+import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.repository.ParticipantRepository
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.dataSource.LocalQuestionDataSource
 import retrofit2.Response
 import javax.inject.Inject

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class GetAllParticipantsByInstitutionIdController(private val getAllParticipantsByInstitutionUseCase: GetAllParticipantsByInstitutionUseCase) :
     BaseController() {
     @GetMapping("/{institutionId}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(
         AdministratorNotFoundException::class,
         ParticipantNotFoundException::class,

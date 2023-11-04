@@ -2,6 +2,7 @@ package br.com.udesc.eso.tcc.studytalk.core.data.dataBase
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.LocalAdministratorDataSource
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.entity.AdministratorRoomEntity
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.dataSource.LocalAnswerDataSource
@@ -28,6 +29,7 @@ import br.com.udesc.eso.tcc.studytalk.featureReport.data.entity.ReportRoomEntity
         ReportRoomEntity::class],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class StudyTalkRoomDatabase : RoomDatabase() {
     abstract fun getLocalAdministratorDataSource(): LocalAdministratorDataSource
     abstract fun getLocalAnswerDataSource(): LocalAnswerDataSource

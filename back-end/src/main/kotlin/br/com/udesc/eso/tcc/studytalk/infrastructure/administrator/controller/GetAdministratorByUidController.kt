@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 class GetAdministratorByUidController(private val getAdministratorByUidUseCase: GetAdministratorByUidUseCase) :
     BaseController() {
     @GetMapping("/{uid}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(AdministratorNotFoundException::class)
     fun getAdministratorByUid(@PathVariable uid: String): Response {
         return convert(getAdministratorByUidUseCase.execute(GetAdministratorByUidUseCase.Input(uid)).administrator)

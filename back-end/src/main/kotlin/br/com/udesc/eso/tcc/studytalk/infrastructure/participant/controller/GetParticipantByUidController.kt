@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class GetParticipantByUidController(private val getParticipantByUidUseCase: GetParticipantByUidUseCase) :
     BaseController() {
     @GetMapping("/{participantToBeRetrievedUid}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(
         AdministratorNotFoundException::class,
         ParticipantNotFoundException::class,

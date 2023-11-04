@@ -54,7 +54,7 @@ class GetAllInstitutionsIntegrationTest @Autowired constructor(
             .`when`()
             .get("/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .body("institutions", CoreMatchers.equalTo(expectedResponse))
     }
 

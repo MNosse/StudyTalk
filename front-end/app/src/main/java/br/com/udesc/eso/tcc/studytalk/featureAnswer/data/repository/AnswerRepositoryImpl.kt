@@ -9,6 +9,7 @@ import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.model.AnswerApiModel
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.request.UpdateAnswerRequest
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.response.GetAllAnswersResponse
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.model.Answer
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.repository.AnswerRepository
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.dataSource.LocalParticipantDataSource
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.dataSource.LocalQuestionDataSource
 import retrofit2.Response
@@ -18,12 +19,12 @@ class AnswerRepositoryImpl @Inject constructor(
     private val localAnswerDataSource: LocalAnswerDataSource,
     private val localParticipantDataSource: LocalParticipantDataSource,
     private val localQuestionDataSource: LocalQuestionDataSource,
-    private val remoteAnwerDataSource: RemoteAnswerDataSource
+    private val remoteAnswerDataSource: RemoteAnswerDataSource
 ) : AnswerRepository, BaseRepositoryImpl() {
 
     override suspend fun delete(id: Long, participantUid: String): Result<Unit> {
         return try {
-            val response = remoteAnwerDataSource.delete(
+            val response = remoteAnswerDataSource.delete(
                 id = id,
                 participantUid = participantUid
             )
@@ -44,7 +45,7 @@ class AnswerRepositoryImpl @Inject constructor(
         return try {
             if (isOnline()) {
                 getAllRemote(
-                    remoteAnwerDataSource.getAllByQuestion(
+                    remoteAnswerDataSource.getAllByQuestion(
                         id = id,
                         participantUid = participantUid
                     )
@@ -66,7 +67,7 @@ class AnswerRepositoryImpl @Inject constructor(
         return try {
             if (isOnline()) {
                 getRemote(
-                    remoteAnwerDataSource.getById(
+                    remoteAnswerDataSource.getById(
                         id = id,
                         participantUid = participantUid
                     )
@@ -90,7 +91,7 @@ class AnswerRepositoryImpl @Inject constructor(
         participantUid: String
     ): Result<Unit> {
         return try {
-            val response = remoteAnwerDataSource.update(
+            val response = remoteAnswerDataSource.update(
                 id = id,
                 request = UpdateAnswerRequest(
                     description = description,

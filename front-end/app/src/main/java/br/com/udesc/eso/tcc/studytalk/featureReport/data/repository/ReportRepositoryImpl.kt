@@ -11,6 +11,7 @@ import br.com.udesc.eso.tcc.studytalk.featureReport.data.model.ReportApiModel
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.request.CreateReportRequest
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.response.GetAllReportsResponse
 import br.com.udesc.eso.tcc.studytalk.featureReport.domain.model.Report
+import br.com.udesc.eso.tcc.studytalk.featureReport.domain.repository.ReportRepository
 import retrofit2.Response
 import javax.inject.Inject
 

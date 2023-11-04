@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/studytalk/api/answers")
 class GetAnswerByIdController(private val getAnswerByIdUseCase: GetAnswerByIdUseCase) : BaseController() {
     @GetMapping("/{id}/")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @Throws(
         AnswerNotFoundException::class,
         ParticipantNotFoundException::class,

@@ -38,7 +38,7 @@ class GetAdministratorApiTest @Autowired constructor(private val administratorRe
             .`when`()
             .get("/{uid}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .contentType(ContentType.JSON)
             .body("uid", equalTo(administratorUid))
     }

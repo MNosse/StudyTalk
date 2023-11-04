@@ -96,7 +96,7 @@ class GetAllAnswersByQuestionApiTest @Autowired constructor(
             .`when`()
             .get("/{id}/")
             .then()
-            .statusCode(HttpStatus.FOUND.value())
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .jsonPath()
             .getList("answers", Answer::class.java)
