@@ -16,7 +16,7 @@ interface LocalReportDataSource {
     @Query("DELETE FROM report WHERE id = :id")
     fun deleteById(id: Long)
 
-    @Query ("SELECT id FROM report")
+    @Query("SELECT id FROM report")
     suspend fun getAllIds(): MutableList<Long>
 
     @Query(

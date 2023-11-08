@@ -84,14 +84,17 @@ class ParticipantDatabaseGateway(
     override fun create(registrationCode: String, uid: String, name: String): Participant? {
         var participant: ParticipantSchema? = null
         institutionRepository.findByRegistrationCode(registrationCode)?.let {
-            participant = participantRepository.save(ParticipantSchema(uid = uid, name = name))
-            enrollmentRequestRepository.save(
-                EnrollmentRequestSchema(
-                    institution = it,
-                    participant = participant!!
+            if (participantRepository.findAllByInstitutionId(it.id).size > 0) {
+                participant = participantRepository.save(ParticipantSchema(uid = uid, name = name))
+                enrollmentRequestRepository.save(
+                    EnrollmentRequestSchema(
+                        institution = it,
+                        participant = participant!!
+                    )
                 )
-            )
-
+            } else {
+                participant = participantRepository.save(ParticipantSchema(uid = uid, name = name, privilege = Privilege.PRINCIPAL, institution = it))
+            }
         }
         return participant?.let {
             convert(participant!!)

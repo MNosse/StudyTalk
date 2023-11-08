@@ -37,7 +37,7 @@ class InstitutionRepositoryImpl @Inject constructor(
                 }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -53,7 +53,7 @@ class InstitutionRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -141,7 +141,7 @@ class InstitutionRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -170,7 +170,7 @@ class InstitutionRepositoryImpl @Inject constructor(
             }
             Result.success(institutions)
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 
@@ -190,7 +190,7 @@ class InstitutionRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 

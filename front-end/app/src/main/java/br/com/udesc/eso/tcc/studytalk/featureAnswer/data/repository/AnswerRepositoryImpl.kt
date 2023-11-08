@@ -31,7 +31,7 @@ class AnswerRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -101,7 +101,7 @@ class AnswerRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -134,7 +134,7 @@ class AnswerRepositoryImpl @Inject constructor(
             }
             Result.success(answers)
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 
@@ -160,7 +160,7 @@ class AnswerRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 

@@ -30,7 +30,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -121,7 +121,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -154,7 +154,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
             }
             Result.success(enrollmentRequesties)
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 
@@ -176,7 +176,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 

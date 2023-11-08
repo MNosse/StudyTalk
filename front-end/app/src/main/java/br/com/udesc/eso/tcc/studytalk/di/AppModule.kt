@@ -23,6 +23,7 @@ import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.LocalIn
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.RemoteInstitutionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.repository.InstitutionRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.repository.InstitutionRepository
+import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.InstitutionUseCases
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.dataSource.LocalParticipantDataSource
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.dataSource.RemoteParticipantDataSource
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.data.repository.ParticipantRepositoryImpl
@@ -267,18 +268,41 @@ class AppModule {
                 repository
             )
         )
+    }
 
+    @Provides
+    @Singleton
+    fun provideInstitutionUseCases(repository: InstitutionRepository): InstitutionUseCases {
+        return InstitutionUseCases(
+            createUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.CreateUseCase(
+                repository
+            ),
+            deleteUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.DeleteUseCase(
+                repository
+            ),
+            getAllUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.GetAllUseCase(
+                repository
+            ),
+            getByIdUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.GetByIdUseCase(
+                repository
+            ),
+            updateUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.UpdateUseCase(
+                repository
+            )
+        )
     }
 
     @Provides
     @Singleton
     fun provideParticipantUseCases(repository: ParticipantRepository): ParticipantUseCases {
         return ParticipantUseCases(
+            createUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.CreateUseCase(
+                repository
+            ),
             getByUidUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase(
                 repository
             )
         )
-
     }
 
 }

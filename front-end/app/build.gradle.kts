@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.studytalk"
+    namespace = "br.com.udesc.eso.tcc.studytalk"
     compileSdk = 34
 
     defaultConfig {

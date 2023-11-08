@@ -25,7 +25,7 @@ interface LocalEnrollmentRequestDataSource {
         requestingParticipantUid: String
     ): MutableList<EnrollmentRequestRoomEntity>
 
-    @Query ("SELECT id FROM enrollment_request")
+    @Query("SELECT id FROM enrollment_request")
     suspend fun getAllIds(): MutableList<Long>
 
     @Query(

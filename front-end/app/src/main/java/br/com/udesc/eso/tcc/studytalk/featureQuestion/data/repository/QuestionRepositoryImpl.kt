@@ -32,7 +32,7 @@ class QuestionRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -106,7 +106,7 @@ class QuestionRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -141,7 +141,7 @@ class QuestionRepositoryImpl @Inject constructor(
             }
             Result.success(questions)
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 
@@ -165,7 +165,7 @@ class QuestionRepositoryImpl @Inject constructor(
                 Result.success(convertToModel(it))
             }
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 

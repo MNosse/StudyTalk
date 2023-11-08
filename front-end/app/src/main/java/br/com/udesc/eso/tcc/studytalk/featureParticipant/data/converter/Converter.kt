@@ -52,16 +52,20 @@ fun convertToModel(participant: ParticipantApiModel): Participant {
         institution = participant.institution?.let {
             br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel(it)
         },
-        favoriteQuestions = participant.favoriteQuestions.map { question ->
-            br.com.udesc.eso.tcc.studytalk.featureQuestion.data.converter.convertToModel(
-                question
-            )
-        }.toMutableList(),
-        likedAnswers = participant.likedAnswers.map { answer ->
-            br.com.udesc.eso.tcc.studytalk.featureAnswer.data.converter.convertToModel(
-                answer
-            )
-        }.toMutableList()
+        favoriteQuestions = if (participant.favoriteQuestions != null) {
+            participant.favoriteQuestions.map { question ->
+                br.com.udesc.eso.tcc.studytalk.featureQuestion.data.converter.convertToModel(
+                    question
+                )
+            }.toMutableList()
+        } else mutableListOf(),
+        likedAnswers = if (participant.likedAnswers != null) {
+            participant.likedAnswers.map { answer ->
+                br.com.udesc.eso.tcc.studytalk.featureAnswer.data.converter.convertToModel(
+                    answer
+                )
+            }.toMutableList()
+        } else mutableListOf()
     )
 }
 

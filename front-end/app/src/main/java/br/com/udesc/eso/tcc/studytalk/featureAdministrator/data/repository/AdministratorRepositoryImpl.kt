@@ -28,7 +28,7 @@ class AdministratorRepositoryImpl @Inject constructor(
                 }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -44,7 +44,7 @@ class AdministratorRepositoryImpl @Inject constructor(
                         Result.success(convertToModel(it))
                     }
                 } else {
-                    Result.failure(Exception("$response.errorBody()"))
+                    Result.failure(Exception(response.errorBody()?.string()))
                 }
             } else {
                 val response = localAdministratorDataSource.getByUid(uid = uid)

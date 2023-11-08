@@ -1,30 +1,45 @@
 package br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.institutions.InstitutionsScreen
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.CreateParticipantScreen
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.participants.ParticipantsScreen
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.waitingApprove.WaitingApproveInScreen
-import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.QuestionsScreen
+import androidx.navigation.navArgument
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkBottomNavigationBar
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.home.view.HomeScreen
+import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.addEditViewInstitution.view.AddEditViewInstitutionScreen
+import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.institutions.view.InstitutionsScreen
+import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.view.CreateParticipantScreen
+import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.participants.view.ParticipantsScreen
+import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.waitingApprove.view.WaitingApproveScreen
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.view.QuestionsScreen
 import br.com.udesc.eso.tcc.studytalk.ui.theme.StudyTalkTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +48,6 @@ class BaseActivity : ComponentActivity() {
 
     private val viewModel: BaseViewModel by viewModels()
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,53 +58,85 @@ class BaseActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
+                    val bottomNavigationBarVisibility = remember { mutableStateOf(false) }
+                    val selectedItemIndex = remember { mutableIntStateOf(0) }
+
                     Scaffold(
-                        bottomBar = {
-                            NavigationBar {
-                                viewModel.bottomNavigationItens.forEachIndexed { index, item ->
-                                    NavigationBarItem(
-                                        selected = index == viewModel.selectedItemIndex.value,
-                                        onClick = {
-                                            viewModel.onEvent(BaseEvent.ChangeCurrentIndex(index))
-                                            navController.navigate(item.route)
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        icon = {
-                                            Icon(
-                                                imageVector = if (index == viewModel.selectedItemIndex.value) {
-                                                    item.selectedIcon
-                                                } else item.unselectedIcon,
-                                                contentDescription = item.title
-                                            )
-                                        }
-                                    )
+                        content = { paddingValues ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                                    .padding(paddingValues)
+                            ) {
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = viewModel.route.value
+                                ) {
+                                    composable(
+                                        route = BaseScreens.AddEditInstitutionScreen.route + "?institutionId={institutionId}",
+                                        arguments = listOf(
+                                            navArgument(
+                                                name = "institutionId"
+                                            ) {
+                                                type = NavType.LongType
+                                                defaultValue = -1L
+                                            }
+                                        )
+                                    ) {
+                                        AddEditViewInstitutionScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = false
+                                    }
+                                    composable(route = BaseScreens.CreateParticipantScreen.route) {
+                                        CreateParticipantScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = false
+                                    }
+                                    composable(route = BaseScreens.HomeScreen.route) {
+                                        HomeScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = true
+                                    }
+                                    composable(route = BaseScreens.InstitutionsScreen.route) {
+                                        InstitutionsScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = true
+                                    }
+                                    composable(route = BaseScreens.ParticipantsScreen.route) {
+                                        ParticipantsScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = true
+                                    }
+                                    composable(route = BaseScreens.QuestionsScreen.route) {
+                                        QuestionsScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = true
+                                    }
+                                    composable(route = BaseScreens.WaitingApproveScreen.route) {
+                                        WaitingApproveScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = false
+                                    }
                                 }
                             }
+                        },
+                        bottomBar = {
+                            AnimatedVisibility(
+                                visible = bottomNavigationBarVisibility.value,
+                                enter = slideInVertically(
+                                    animationSpec = tween(400)
+                                ) + expandVertically(
+                                    expandFrom = Alignment.Top
+                                ) + fadeIn(
+                                    initialAlpha = 0.3f
+                                ),
+                                exit = slideOutVertically() + shrinkVertically() + fadeOut()
+                            ) {
+                                StudyTalkBottomNavigationBar(
+                                    bottomNavigationItens = viewModel.bottomNavigationItens,
+                                    selectedItemIndex = selectedItemIndex.value,
+                                    onClick = { index, item ->
+                                        selectedItemIndex.intValue = index
+                                        navController.navigate(item.route)
+                                    }
+                                )
+                            }
                         }
-                    ) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = viewModel.route.value
-                        ) {
-                            composable(route = BaseScreens.CreateParticipantScreen.route) {
-                                CreateParticipantScreen(navController = navController)
-                            }
-                            composable(route = BaseScreens.InstitutionsScreen.route) {
-                                InstitutionsScreen(navController = navController)
-                            }
-                            composable(route = BaseScreens.ParticipantsScreen.route) {
-                                ParticipantsScreen(navController = navController)
-                            }
-                            composable(route = BaseScreens.QuestionsScreen.route) {
-                                QuestionsScreen(navController = navController)
-                            }
-                            composable(route = BaseScreens.WaitingApproveScreen.route) {
-                                WaitingApproveInScreen(navController = navController)
-                            }
-                        }
-                    }
+                    )
 
                     ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
                         val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom

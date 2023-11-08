@@ -16,6 +16,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.BottomNavigationItem
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.model.Administrator
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.AdministratorUseCases
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.model.Participant
@@ -35,12 +36,6 @@ class BaseViewModel @Inject constructor(
 
     lateinit var bottomNavigationItens: List<BottomNavigationItem>
 
-    private val _selectedItemIndex = mutableIntStateOf(0)
-    val selectedItemIndex: State<Int> = _selectedItemIndex
-
-    private val _signOut = mutableStateOf(false)
-    val signOut: State<Boolean> = _signOut
-
     private val _route = mutableStateOf("")
     val route: State<String> = _route
 
@@ -52,10 +47,6 @@ class BaseViewModel @Inject constructor(
 
     fun onEvent(event: BaseEvent) {
         when (event) {
-            is BaseEvent.ChangeCurrentIndex -> {
-                _selectedItemIndex.intValue = event.index
-            }
-
             is BaseEvent.SignOut -> {
                 signOut()
             }
@@ -77,8 +68,6 @@ class BaseViewModel @Inject constructor(
                     } else {
                         participantUseCases.getByUidUseCase(
                             br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase.Input(
-                                requestingUid = uid,
-                                isAdministrator = false,
                                 participantToBeRetrievedUid = uid
                             )
                         ).result.let {
@@ -175,6 +164,5 @@ class BaseViewModel @Inject constructor(
     fun signOut() {
         sharedPreferences.edit().putString("current_uid", "").apply()
         FirebaseAuth.getInstance().signOut()
-        _signOut.value = true
     }
 }

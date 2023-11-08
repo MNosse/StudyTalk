@@ -54,7 +54,7 @@ class ParticipantRepositoryImpl @Inject constructor(
                 }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -73,7 +73,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -92,7 +92,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -114,7 +114,7 @@ class ParticipantRepositoryImpl @Inject constructor(
                 }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -133,7 +133,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -165,7 +165,7 @@ class ParticipantRepositoryImpl @Inject constructor(
                 }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -259,7 +259,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -282,7 +282,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("$response.errorBody()"))
+                Result.failure(Exception(response.errorBody()?.string()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -320,7 +320,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             }
             Result.success(participants)
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 
@@ -349,7 +349,7 @@ class ParticipantRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            Result.failure(Exception("$response.errorBody()"))
+            Result.failure(Exception(response.errorBody()?.string()))
         }
     }
 }

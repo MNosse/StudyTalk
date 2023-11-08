@@ -1,4 +1,4 @@
-package com.example.studytalk
+package br.com.udesc.eso.tcc.studytalk
 
 import org.junit.Test
 

@@ -1,3 +1,88 @@
 <resources>
     <string name="app_name">StudyTalk</string>
+
+    <!-- Content Description -->
+    <string name="answers_fab_content_description">Adicionar resposta</string>
+    <string name="institutions_fab_content_description">Adicionar instituição</string>
+    <string name="institution_fab_content_description">Cadastrar instituição</string>
+    <string name="participant_fab_content_description">Cadastrar participante</string>
+    <string name="questions_fab_content_description">Adicionar questão</string>
+    <string name="top_app_bar_dropdown_menu_content_description">Opções</string>
+    <string name="top_app_bar_dropdown_menu_item_about_content_description">Sobre</string>
+    <string name="top_app_bar_dropdown_menu_item_edit_content_description">Editar</string>
+    <string name="top_app_bar_dropdown_menu_item_delete_content_description">Excluir</string>
+    <string name="top_app_bar_nav_back">Voltar</string>
+    <string name="studytalk_logo_content_description">Logo do StudyTalk</string>
+
+    <!-- Created Message -->
+    <string name="administrator_created_message">Administrador criado com sucesso.</string>
+    <string name="answer_created_message">Resposta criada com sucesso.</string>
+    <string name="institution_created_message">Instituição criada com sucesso.</string>
+    <string name="participant_created_message">Participante criado com sucesso.</string>
+    <string name="question_created_message">Pergunta criada com sucesso.</string>
+    <string name="report_created_message">Denúncia criada com sucesso.</string>
+
+    <!-- Deleted Message -->
+    <string name="answer_deleted_message">Resposta deletada com sucesso.</string>
+    <string name="institution_deleted_message">Instituição deletada com sucesso.</string>
+    <string name="participant_deleted_message">Participante deletado com sucesso.</string>
+    <string name="question_deleted_message">Pergunta deletada com sucesso.</string>
+
+    <!-- Dialog Text -->
+    <string name="change_mode_dialog_title">Mudança de Modo</string>
+    <string name="change_mode_dialog_content">Você deseja mudar o modo da aplicação para %1$s</string>
+    <string name="confirm_dialog_button">Confirmar</string>
+    <string name="dismiss_dialog_button">Cancelar</string>
+    <string name="delete_dialog_title">Excluir %1$s</string>
+    <string name="delete_dialog_content">Deseja excluir permanentemente %1$s?</string>
+    <string name="delete_institution_option">essa instituição</string>
+    <string name="delete_dialog_button">Excluir</string>
+
+    <!-- Entity -->
+    <string name="institution">Instituição</string>
+
+    <!-- Failed Message -->
+    <string name="administrator_creation_failed">Falha ao criar o Administrador.</string>
+
+    <!-- Invalid Fields -->
+    <string name="invalid_password_length">Sua senha deve ter ao menos 8 caracteres.</string>
+
+    <!-- Mode Changed -->
+    <string name="mode_changed">Modo alterado para %1$s</string>
+
+    <!-- FAB Text -->
+    <string name="add_institution_fab_text">Cadastrar</string>
+    <string name="edit_institution_fab_text">Salvar</string>
+
+    <!-- TextField Labels -->
+    <string name="add_edit_view_institution_name_label">Nome</string>
+    <string name="add_edit_view_institution_registration_code_label">Código de Cadastro</string>
+
+    <!-- TopAppBar Menu Item -->
+    <string name="top_app_bar_dropdown_menu_item_about">Sobre</string>
+    <string name="top_app_bar_dropdown_menu_item_edit">Editar</string>
+    <string name="top_app_bar_dropdown_menu_item_delete">Excluir</string>
+
+    <!-- TopAppBar Title -->
+    <string name="about_top_app_bar_title">Sobre</string>
+    <string name="enrollment_request_top_app_bar_title">Solicitação de Cadastro</string>
+    <string name="enrollment_requesties_top_app_bar_title">Solicitações de Cadastro</string>
+    <string name="institution_top_app_bar_title">Instituição</string>
+    <string name="institutions_top_app_bar_title">Instituições</string>
+    <string name="participants_top_app_bar_title">Participantes</string>
+    <string name="question_top_app_bar_title">Questão</string>
+    <string name="questions_top_app_bar_title">Questões</string>
+    <string name="profile_top_app_bar_title">Perfil</string>
+    <string name="studytalk_top_app_bar_title">StudyTalk</string>
+
+    <!-- Updated Message -->
+    <string name="answer_updated_message">Resposta atualizada com sucesso.</string>
+    <string name="institution_updated_message">Instituição atualizada com sucesso.</string>
+    <string name="participant_updated_message">Participante atualizado com sucesso.</string>
+    <string name="question_updated_message">Pergunta atualizada com sucesso.</string>
+
+    <!-- Screen Text -->
+    <string name="about_description_text">O StudyTalk é uma aplicação que busca auxiliar na educação de estudates através do debate. Aqui você encontrará uma vasta biblioteca de perguntas e respostas.</string>
+    <string name="about_developed_by_text">Desenvolvido por: Mateus Coelho Nosse</string>
+
 </resources>

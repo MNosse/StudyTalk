@@ -17,9 +17,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseActivity
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.about.AboutScreen
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.signIn.SignInScreen
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.signUp.SignUpScreen
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.about.view.AboutScreen
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.signIn.view.SignInScreen
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.signUp.view.SignUpScreen
 import br.com.udesc.eso.tcc.studytalk.ui.theme.StudyTalkTheme
 import dagger.hilt.android.AndroidEntryPoint
 

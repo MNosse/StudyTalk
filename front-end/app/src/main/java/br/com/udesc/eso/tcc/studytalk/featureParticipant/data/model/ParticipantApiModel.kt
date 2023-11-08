@@ -11,6 +11,6 @@ class ParticipantApiModel(
     var name: String,
     var privilege: Privilege,
     val institution: InstitutionApiModel? = null,
-    val favoriteQuestions: MutableList<QuestionApiModel> = mutableListOf(),
-    val likedAnswers: MutableList<AnswerApiModel> = mutableListOf()
+    val favoriteQuestions: MutableList<QuestionApiModel>? = mutableListOf(),
+    val likedAnswers: MutableList<AnswerApiModel>? = mutableListOf()
 )

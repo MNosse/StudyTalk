@@ -23,7 +23,11 @@ class GetByUidUseCase(
         val requestingUid: String,
         val isAdministrator: Boolean,
         val participantToBeRetrievedUid: String
-    )
+    ) {
+        constructor(
+            participantToBeRetrievedUid: String
+        ) : this(participantToBeRetrievedUid, false, participantToBeRetrievedUid)
+    }
 
     data class Output(val result: Result<Participant?>)
 

@@ -25,7 +25,7 @@ interface LocalAnswerDataSource {
         participantUid: String
     ): MutableList<AnswerRoomEntity>
 
-    @Query ("SELECT id FROM answer")
+    @Query("SELECT id FROM answer")
     suspend fun getAllIds(): MutableList<Long>
 
     @Query(

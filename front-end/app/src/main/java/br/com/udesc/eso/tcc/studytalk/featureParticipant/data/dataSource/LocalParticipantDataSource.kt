@@ -18,7 +18,7 @@ interface LocalParticipantDataSource {
     @Query("SELECT * FROM participant WHERE (SELECT CASE WHEN EXISTS (SELECT 1 FROM administrator WHERE uid = :administratorUid) THEN 1 ELSE 0 END) = 1")
     suspend fun getAll(administratorUid: String): MutableList<ParticipantRoomEntity>
 
-    @Query ("SELECT id FROM participant")
+    @Query("SELECT id FROM participant")
     suspend fun getAllIds(): MutableList<Long>
 
     @Query(
