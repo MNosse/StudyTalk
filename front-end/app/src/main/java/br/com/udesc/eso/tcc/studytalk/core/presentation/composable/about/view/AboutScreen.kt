@@ -14,13 +14,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +46,6 @@ fun AboutScreen(
     var changeModeDialogVisible by remember { mutableStateOf(false) }
     var logoClickCount by remember { mutableIntStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = viewModel.snackbarMessage.value.asString()
 
     Scaffold(
         topBar = {
@@ -59,18 +56,9 @@ fun AboutScreen(
             )
         },
         content = {
-            if (snackbarMessage.isNotBlank()) {
-                LaunchedEffect(snackbarHostState) {
-                    snackbarHostState.showSnackbar(
-                        message = String(snackbarMessage.toByteArray()),
-                        duration = SnackbarDuration.Short
-                    )
-                    viewModel.onEvent(AboutEvent.ClearSnackbarMessage)
-                }
-            }
-
             StudyTalkScreen(
                 navController = navController,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel
             )
             Box(

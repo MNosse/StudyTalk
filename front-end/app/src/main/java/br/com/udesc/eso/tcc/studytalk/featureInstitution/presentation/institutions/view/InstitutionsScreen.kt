@@ -12,7 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,6 +35,7 @@ fun InstitutionsScreen(
     navController: NavController,
     viewModel: InstitutionsViewModel = hiltViewModel()
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
     val state = viewModel.state.value
 
     Scaffold(
@@ -43,6 +47,7 @@ fun InstitutionsScreen(
 
             StudyTalkScreen(
                 navController = navController,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel
             )
             Box(
@@ -64,7 +69,7 @@ fun InstitutionsScreen(
                                 title = institution.name,
                                 showDivider = index != size,
                                 onClick = {
-                                    navController.navigate(BaseScreens.AddEditInstitutionScreen.route + "?institutionId=${institution.id}")
+                                    navController.navigate(BaseScreens.AddEditViewInstitutionScreen.route + "?institutionId=${institution.id}")
                                 }
                             )
                         }
@@ -80,8 +85,11 @@ fun InstitutionsScreen(
             StudyTalkFloatingActionButton(
                 iconVector = Icons.Filled.Add,
                 iconDescription = stringResource(R.string.institutions_fab_content_description),
-                onClick = { navController.navigate(BaseScreens.AddEditInstitutionScreen.route) }
+                onClick = { navController.navigate(BaseScreens.AddEditViewInstitutionScreen.route) }
             )
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
     )
 }

@@ -43,30 +43,28 @@ fun convertToModel(
     )
 }
 
-fun convertToModel(participant: ParticipantApiModel): Participant {
-    return Participant(
-        id = participant.id,
-        uid = participant.uid,
-        name = participant.name,
-        privilege = participant.privilege,
-        institution = participant.institution?.let {
-            br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel(it)
-        },
-        favoriteQuestions = if (participant.favoriteQuestions != null) {
-            participant.favoriteQuestions.map { question ->
+fun convertToModel(participant: ParticipantApiModel?): Participant? {
+    return participant?.let {
+        Participant(
+            id = participant.id,
+            uid = participant.uid,
+            name = participant.name,
+            privilege = participant.privilege,
+            institution = participant.institution?.let {
+                br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel(it)
+            },
+            favoriteQuestions = participant.favoriteQuestions?.map { question ->
                 br.com.udesc.eso.tcc.studytalk.featureQuestion.data.converter.convertToModel(
                     question
                 )
-            }.toMutableList()
-        } else mutableListOf(),
-        likedAnswers = if (participant.likedAnswers != null) {
-            participant.likedAnswers.map { answer ->
+            }?.toMutableList() ?: mutableListOf(),
+            likedAnswers = participant.likedAnswers?.map { answer ->
                 br.com.udesc.eso.tcc.studytalk.featureAnswer.data.converter.convertToModel(
                     answer
                 )
-            }.toMutableList()
-        } else mutableListOf()
-    )
+            }?.toMutableList() ?: mutableListOf()
+        )
+    }
 }
 
 fun convertToRoomEntity(participant: ParticipantApiModel): ParticipantRoomEntity {

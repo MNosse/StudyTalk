@@ -27,7 +27,7 @@ fun convertToModel(report: ReportApiModel): Report {
         description = report.description,
         institution = br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel(
             report.institution
-        )
+        )!!
     )
 }
 

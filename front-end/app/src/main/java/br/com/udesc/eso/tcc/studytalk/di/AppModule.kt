@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import br.com.udesc.eso.tcc.studytalk.core.data.dataBase.StudyTalkRoomDatabase
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.utils.Constants
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.LocalAdministratorDataSource
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.RemoteAdministratorDataSource
@@ -33,6 +35,8 @@ import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.dataSource.LocalQuest
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.dataSource.RemoteQuestionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.data.repository.QuestionRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.repository.QuestionRepository
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.GetAllByInstitutionUseCase
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.QuestionUseCases
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.dataSource.LocalReportDataSource
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.dataSource.RemoteReportDataSource
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.repository.ReportRepositoryImpl
@@ -296,12 +300,53 @@ class AppModule {
     @Singleton
     fun provideParticipantUseCases(repository: ParticipantRepository): ParticipantUseCases {
         return ParticipantUseCases(
+            changeAQuestionFavoriteStatusUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ChangeAQuestionFavoriteStatusUseCase(
+                repository
+            ),
             createUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.CreateUseCase(
+                repository
+            ),
+            doAQuestionUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.DoAQuestionUseCase(
                 repository
             ),
             getByUidUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase(
                 repository
             )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuestionUseCases(repository: QuestionRepository): QuestionUseCases {
+        return QuestionUseCases(
+            deleteUseCase = br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.DeleteUseCase(
+                repository
+            ),
+            getAllByInstitutionUseCase = GetAllByInstitutionUseCase(
+                repository
+            ),
+            getByIdUseCase = br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.GetByIdUseCase(
+                repository
+            ),
+            updateUseCase = br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.UpdateUseCase(
+                repository
+            )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideStudyTalkAdministratorHandler(administratorUseCases: AdministratorUseCases): StudyTalkAdministratorHandler {
+        return StudyTalkAdministratorHandler(
+            administratorUseCases = administratorUseCases
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideStudyTalkParticipantHandler(participantUseCases: ParticipantUseCases): StudyTalkParticipantHandler {
+        return StudyTalkParticipantHandler(
+            participantUseCases = participantUseCases
         )
     }
 

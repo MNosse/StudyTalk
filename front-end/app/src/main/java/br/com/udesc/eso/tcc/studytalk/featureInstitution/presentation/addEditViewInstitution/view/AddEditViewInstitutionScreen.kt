@@ -12,13 +12,11 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,17 +52,6 @@ fun AddEditViewInstitutionScreen(
     val institutionId = viewModel.currentInstitutionId.value
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = viewModel.snackbarMessage.value.asString()
-
-    if (snackbarMessage.isNotBlank()) {
-        LaunchedEffect(snackbarHostState) {
-            snackbarHostState.showSnackbar(
-                message = String(snackbarMessage.toByteArray()),
-                duration = SnackbarDuration.Short
-            )
-            viewModel.onEvent(AddEditViewInstitutionEvent.ClearSnackbarMessage)
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -103,6 +90,7 @@ fun AddEditViewInstitutionScreen(
         content = {
             StudyTalkScreen(
                 navController = navController,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel
             )
             Box(
@@ -117,7 +105,7 @@ fun AddEditViewInstitutionScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     StudyTalkTextField(
-                        label = stringResource(R.string.add_edit_view_institution_name_label),
+                        label = stringResource(R.string.name_label),
                         value = viewModel.name.value,
                         singleLine = true,
                         enabled = (editMode || institutionId == -1L),
@@ -138,7 +126,7 @@ fun AddEditViewInstitutionScreen(
                         }
                     )
                     StudyTalkTextField(
-                        label = stringResource(R.string.add_edit_view_institution_registration_code_label),
+                        label = stringResource(R.string.registration_code_label),
                         value = viewModel.registrationCode.value,
                         singleLine = true,
                         enabled = false,

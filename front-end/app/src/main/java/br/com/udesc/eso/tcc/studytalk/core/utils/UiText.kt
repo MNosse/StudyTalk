@@ -16,14 +16,32 @@ sealed class UiText {
     fun asString(): String {
         return when (this) {
             is DynamicString -> value
-            is StringResource -> stringResource(resId, *args)
+            is StringResource -> {
+                val args = args.map {
+                    if (it is StringResource) {
+                        it.asString()
+                    } else {
+                        it
+                    }
+                }.toTypedArray()
+                stringResource(resId, *args)
+            }
         }
     }
 
     fun asString(context: Context): String {
         return when (this) {
             is DynamicString -> value
-            is StringResource -> context.getString(resId, *args)
+            is StringResource -> {
+                val args = args.map {
+                    if (it is StringResource) {
+                        it.asString(context)
+                    } else {
+                        it
+                    }
+                }.toTypedArray()
+                context.getString(resId, *args)
+            }
         }
     }
 }

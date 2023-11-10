@@ -9,11 +9,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -37,20 +35,8 @@ fun CreateParticipantScreen(
     navController: NavController,
     viewModel: CreateParticipantViewModel = hiltViewModel()
 ) {
-
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = viewModel.snackbarMessage.value.asString()
-
-    if (snackbarMessage.isNotBlank()) {
-        LaunchedEffect(snackbarHostState) {
-            snackbarHostState.showSnackbar(
-                message = String(snackbarMessage.toByteArray()),
-                duration = SnackbarDuration.Short
-            )
-            viewModel.onEvent(CreateParticipantEvent.ClearSnackbarMessage)
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -59,6 +45,7 @@ fun CreateParticipantScreen(
         content = {
             StudyTalkScreen(
                 navController = navController,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel
             )
             Box(
@@ -72,7 +59,7 @@ fun CreateParticipantScreen(
                         .padding(16.dp)
                 ) {
                     StudyTalkTextField(
-                        label = stringResource(R.string.add_edit_view_institution_name_label),
+                        label = stringResource(R.string.name_label),
                         value = viewModel.name.value,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
@@ -87,7 +74,7 @@ fun CreateParticipantScreen(
                         }
                     )
                     StudyTalkTextField(
-                        label = stringResource(R.string.add_edit_view_institution_registration_code_label),
+                        label = stringResource(R.string.registration_code_label),
                         value = viewModel.registrationCode.value,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(

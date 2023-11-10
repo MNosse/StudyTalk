@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.participant.integration
 
+import br.com.udesc.eso.tcc.studytalk.core.enums.Privilege
 import br.com.udesc.eso.tcc.studytalk.entity.institution.exception.InstitutionNotFoundException
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.enrollmentRequest.EnrollmentRequestRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.institution.InstitutionRepository
@@ -45,21 +46,37 @@ class CreateParticipantIntegrationTest @Autowired constructor(
                     name = participantName
                 )
             )
+            createParticipantController.createParticipant(
+                CreateParticipantController.Request(
+                    registrationCode = registrationCode,
+                    uid = "VoZSfuTj8ENjztIccfjbK2KRbHf2",
+                    name = "Mateus Coelho Nosse"
+                )
+            )
             participantRepository.findById(1L).getOrNull()?.let {
                 assert(
                     it.id == 1L
                             && it.uid == participantUid
                             && it.name == participantName
+                            && it.privilege == Privilege.PRINCIPAL
+                            && it.institution!!.id == 1L
                 )
             }
-            enrollmentRequestRepository.findById(1L).getOrNull()?.let {
+            participantRepository.findById(2L).getOrNull()?.let {
+                assert(
+                    it.id == 2L
+                            && it.uid == "VoZSfuTj8ENjztIccfjbK2KRbHf2"
+                            && it.name == "Mateus Coelho Nosse"
+                )
+            }
+            enrollmentRequestRepository.findById(2L).getOrNull()?.let {
                 assert(
                     it.institution.id == 1L
                             && it.institution.registrationCode == registrationCode
                             && it.institution.name == institutionName
-                            && it.participant.id == 1L
-                            && it.participant.uid == participantUid
-                            && it.participant.name == participantName
+                            && it.participant.id == 2L
+                            && it.participant.uid == "VoZSfuTj8ENjztIccfjbK2KRbHf2"
+                            && it.participant.name == "Mateus Coelho Nosse"
                 )
             }
         }

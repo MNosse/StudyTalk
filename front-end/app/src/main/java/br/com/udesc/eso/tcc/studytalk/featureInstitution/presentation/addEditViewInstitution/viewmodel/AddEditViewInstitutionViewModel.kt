@@ -1,7 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.addEditViewInstitution.viewmodel
 
 import android.content.SharedPreferences
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.CreateUseCase
@@ -17,7 +17,6 @@ import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.DeleteUs
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.GetByIdUseCase
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.InstitutionUseCases
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.UpdateUseCase
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,8 +25,10 @@ import javax.inject.Inject
 class AddEditViewInstitutionViewModel @Inject constructor(
     private val institutionUseCases: InstitutionUseCases,
     savedStateHandle: SavedStateHandle,
-    sharedPreferences: SharedPreferences
-) : StudyTalkViewModel() {
+    sharedPreferences: SharedPreferences,
+    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
+    studyTalkParticipantHandler: StudyTalkParticipantHandler
+) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
 
     private val _administratorUid = mutableStateOf("")
     val administratorUid: State<String> = _administratorUid
@@ -43,9 +44,6 @@ class AddEditViewInstitutionViewModel @Inject constructor(
 
     private val _registrationCode = mutableStateOf("")
     val registrationCode: State<String> = _registrationCode
-
-    private val _snackbarMessage: MutableState<UiText> = mutableStateOf(UiText.DynamicString(""))
-    val snackbarMessage: State<UiText> = _snackbarMessage
 
     init {
         _administratorUid.value = sharedPreferences.getString("current_uid", "")!!
@@ -79,10 +77,6 @@ class AddEditViewInstitutionViewModel @Inject constructor(
                 _editMode.value = event.value
             }
 
-            is AddEditViewInstitutionEvent.ClearSnackbarMessage -> {
-                _snackbarMessage.value = UiText.DynamicString("")
-            }
-
             is AddEditViewInstitutionEvent.Delete -> {
                 viewModelScope.launch { delete() }
             }
@@ -98,72 +92,42 @@ class AddEditViewInstitutionViewModel @Inject constructor(
     }
 
     private suspend fun delete() {
-        institutionUseCases.deleteUseCase(
-            input = DeleteUseCase.Input(
-                id = currentInstitutionId.value,
-                administratorUid = administratorUid.value
-            )
-        ).result.let {
-            if (it.isSuccess) {
-                _snackbarMessage.value =
-                    UiText.StringResource(R.string.institution_deleted_message)
-                onEvent(StudyTalkEvent.EnteredRoute(BaseScreens.InstitutionsScreen.route))
-            } else {
-                exceptionToSnackbarMessages(it.exceptionOrNull()!!.message!!)
-            }
-        }
+        handleResult(
+            result = institutionUseCases.deleteUseCase(
+                input = DeleteUseCase.Input(
+                    id = currentInstitutionId.value,
+                    administratorUid = administratorUid.value
+                )
+            ).result,
+            route = BaseScreens.InstitutionsScreen.route,
+            message = UiText.StringResource(R.string.institution_deleted_message)
+        )
     }
 
     private suspend fun save() {
         if (currentInstitutionId.value == -1L) {
-            institutionUseCases.createUseCase(
-                input = CreateUseCase.Input(
-                    administratorUid = _administratorUid.value,
-                    name = name.value
-                )
-            ).result.let {
-                if (it.isSuccess) {
-                    _snackbarMessage.value =
-                        UiText.StringResource(R.string.institution_created_message)
-                    onEvent(StudyTalkEvent.EnteredRoute(BaseScreens.InstitutionsScreen.route))
-                } else {
-                    exceptionToSnackbarMessages(it.exceptionOrNull()!!.message!!)
-                }
-            }
+            handleResult(
+                result = institutionUseCases.createUseCase(
+                    input = CreateUseCase.Input(
+                        administratorUid = _administratorUid.value,
+                        name = name.value
+                    )
+                ).result,
+                route = BaseScreens.InstitutionsScreen.route,
+                message = UiText.StringResource(R.string.institution_created_message)
+            )
         } else {
-            institutionUseCases.updateUseCase(
-                input = UpdateUseCase.Input(
-                    id = currentInstitutionId.value,
-                    administratorUid = _administratorUid.value,
-                    name = name.value
-                )
-            ).result.let {
-                if (it.isSuccess) {
-                    _snackbarMessage.value =
-                        UiText.StringResource(R.string.institution_updated_message)
-                    onEvent(StudyTalkEvent.EnteredRoute(BaseScreens.InstitutionsScreen.route))
-                } else {
-                    exceptionToSnackbarMessages(it.exceptionOrNull()!!.message!!)
-                }
-            }
+            handleResult(
+                result = institutionUseCases.updateUseCase(
+                    input = UpdateUseCase.Input(
+                        id = currentInstitutionId.value,
+                        administratorUid = _administratorUid.value,
+                        name = name.value
+                    )
+                ).result,
+                route = BaseScreens.InstitutionsScreen.route,
+                message = UiText.StringResource(R.string.institution_updated_message)
+            )
         }
     }
-
-    private fun exceptionToSnackbarMessages(exception: String) {
-        val exceptions = Gson().fromJson(
-            exception,
-            Map::class.java
-        )
-        var newSnackbarMessage = ""
-        var count = 0
-        exceptions.forEach { (_, value) ->
-            count++
-            newSnackbarMessage += (value as String)
-            if (count < exceptions.keys.size) {
-                newSnackbarMessage += "\n"
-            }
-        }
-        _snackbarMessage.value = UiText.DynamicString(newSnackbarMessage)
-    }
-
 }

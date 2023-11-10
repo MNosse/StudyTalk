@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">StudyTalk</string>
 
+    <!-- Actions -->
+    <string name="cancel">Cancelar</string>
+    <string name="create">Cadastrar</string>
+    <string name="exclude">Excluir</string>
+    <string name="save">Salvar</string>
+    
     <!-- Content Description -->
     <string name="answers_fab_content_description">Adicionar resposta</string>
     <string name="institutions_fab_content_description">Adicionar instituição</string>
@@ -10,7 +16,9 @@
     <string name="top_app_bar_dropdown_menu_content_description">Opções</string>
     <string name="top_app_bar_dropdown_menu_item_about_content_description">Sobre</string>
     <string name="top_app_bar_dropdown_menu_item_edit_content_description">Editar</string>
+    <string name="top_app_bar_dropdown_menu_item_fav_content_description">Favoritar</string>
     <string name="top_app_bar_dropdown_menu_item_delete_content_description">Excluir</string>
+    <string name="top_app_bar_dropdown_menu_item_report_content_description">Denunciar</string>
     <string name="top_app_bar_nav_back">Voltar</string>
     <string name="studytalk_logo_content_description">Logo do StudyTalk</string>
 
@@ -40,9 +48,23 @@
 
     <!-- Entity -->
     <string name="institution">Instituição</string>
+    <string name="favorite">Favorito</string>
+    <string name="like">Curtida</string>
+    <string name="question">Questão</string>
+
+    <!-- Entity State -->
+    <string name="created">criad%1$s</string>
+    <string name="deleted">deletad%1$s</string>
+    <string name="added">adicionad%1$s</string>
+    <string name="removed">removid%1$s</string>
+    <string name="updated">atualizad%1$s</string>
 
     <!-- Failed Message -->
     <string name="administrator_creation_failed">Falha ao criar o Administrador.</string>
+
+    <!-- Gender -->
+    <string name="fem_gender">a</string>
+    <string name="masc_gender">o</string>
 
     <!-- Invalid Fields -->
     <string name="invalid_password_length">Sua senha deve ter ao menos 8 caracteres.</string>
@@ -54,14 +76,29 @@
     <string name="add_institution_fab_text">Cadastrar</string>
     <string name="edit_institution_fab_text">Salvar</string>
 
+    <!-- Pronoum -->
+    <string name="this_pronoum">ess%1$s %2$s</string>
+
+    <!-- Screen Text -->
+    <string name="about_description_text">O StudyTalk é uma aplicação que busca auxiliar na educação de estudates através do debate. Aqui você encontrará uma vasta biblioteca de perguntas e respostas.</string>
+    <string name="about_developed_by_text">Desenvolvido por: Mateus Coelho Nosse</string>
+
+    <!-- Snackbar Messages -->
+    <string name="generic_snackbar_message">%1$s %2$s com sucesso.</string>
+
     <!-- TextField Labels -->
-    <string name="add_edit_view_institution_name_label">Nome</string>
-    <string name="add_edit_view_institution_registration_code_label">Código de Cadastro</string>
+    <string name="description_label">Descrição</string>
+    <string name="name_label">Nome</string>
+    <string name="registration_code_label">Código de Cadastro</string>
+    <string name="subjects_label">Disciplinas</string>
+    <string name="title_label">Título</string>
 
     <!-- TopAppBar Menu Item -->
     <string name="top_app_bar_dropdown_menu_item_about">Sobre</string>
     <string name="top_app_bar_dropdown_menu_item_edit">Editar</string>
+    <string name="top_app_bar_dropdown_menu_item_fav">Favoritar</string>
     <string name="top_app_bar_dropdown_menu_item_delete">Excluir</string>
+    <string name="top_app_bar_dropdown_menu_item_report">Denunciar</string>
 
     <!-- TopAppBar Title -->
     <string name="about_top_app_bar_title">Sobre</string>
@@ -80,9 +117,5 @@
     <string name="institution_updated_message">Instituição atualizada com sucesso.</string>
     <string name="participant_updated_message">Participante atualizado com sucesso.</string>
     <string name="question_updated_message">Pergunta atualizada com sucesso.</string>
-
-    <!-- Screen Text -->
-    <string name="about_description_text">O StudyTalk é uma aplicação que busca auxiliar na educação de estudates através do debate. Aqui você encontrará uma vasta biblioteca de perguntas e respostas.</string>
-    <string name="about_developed_by_text">Desenvolvido por: Mateus Coelho Nosse</string>
 
 </resources>

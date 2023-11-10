@@ -27,10 +27,10 @@ fun convertToModel(enrollmentRequest: EnrollmentRequestApiModel): EnrollmentRequ
         id = enrollmentRequest.id,
         institution = br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel(
             enrollmentRequest.institution
-        ),
+        )!!,
         participant = br.com.udesc.eso.tcc.studytalk.featureParticipant.data.converter.convertToModel(
             enrollmentRequest.participant
-        )
+        )!!
     )
 }
 

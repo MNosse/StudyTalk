@@ -21,12 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,21 +59,9 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = viewModel.snackbarMessage.value.asString()
 
     var expandedMoreMenu by remember { mutableStateOf(false) }
-
-    if (snackbarMessage.isNotBlank()) {
-        LaunchedEffect(snackbarHostState) {
-            snackbarHostState.showSnackbar(
-                message = snackbarMessage,
-                duration = SnackbarDuration.Short
-            )
-            viewModel.onEvent(SignUpEvent.ClearSnackbarMessage)
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -101,6 +87,7 @@ fun SignUpScreen(
         content = {
             StudyTalkScreen(
                 navController = navController,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel
             )
             Box(

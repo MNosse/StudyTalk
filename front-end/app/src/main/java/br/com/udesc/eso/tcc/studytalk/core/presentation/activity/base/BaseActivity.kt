@@ -39,6 +39,7 @@ import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.institutio
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.view.CreateParticipantScreen
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.participants.view.ParticipantsScreen
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.waitingApprove.view.WaitingApproveScreen
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.addEditViewQuestion.view.AddEditViewQuestionScreen
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.view.QuestionsScreen
 import br.com.udesc.eso.tcc.studytalk.ui.theme.StudyTalkTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,7 +75,7 @@ class BaseActivity : ComponentActivity() {
                                     startDestination = viewModel.route.value
                                 ) {
                                     composable(
-                                        route = BaseScreens.AddEditInstitutionScreen.route + "?institutionId={institutionId}",
+                                        route = BaseScreens.AddEditViewInstitutionScreen.route + "?institutionId={institutionId}",
                                         arguments = listOf(
                                             navArgument(
                                                 name = "institutionId"
@@ -85,6 +86,20 @@ class BaseActivity : ComponentActivity() {
                                         )
                                     ) {
                                         AddEditViewInstitutionScreen(navController = navController)
+                                        bottomNavigationBarVisibility.value = false
+                                    }
+                                    composable(
+                                        route = BaseScreens.AddEditViewQuestionScreen.route + "?questionId={questionId}",
+                                        arguments = listOf(
+                                            navArgument(
+                                                name = "questionId"
+                                            ) {
+                                                type = NavType.LongType
+                                                defaultValue = -1L
+                                            }
+                                        )
+                                    ) {
+                                        AddEditViewQuestionScreen(navController = navController)
                                         bottomNavigationBarVisibility.value = false
                                     }
                                     composable(route = BaseScreens.CreateParticipantScreen.route) {

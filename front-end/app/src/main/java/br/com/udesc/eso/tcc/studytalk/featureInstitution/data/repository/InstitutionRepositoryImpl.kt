@@ -164,7 +164,7 @@ class InstitutionRepositoryImpl @Inject constructor(
             response.body()?.let {
                 for (institution in it.institutions) {
                     institutions.add(
-                        convertToModel(institution)
+                        convertToModel(institution)!!
                     )
                 }
             }

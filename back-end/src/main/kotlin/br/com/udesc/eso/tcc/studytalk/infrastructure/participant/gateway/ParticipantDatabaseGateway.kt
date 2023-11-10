@@ -93,7 +93,14 @@ class ParticipantDatabaseGateway(
                     )
                 )
             } else {
-                participant = participantRepository.save(ParticipantSchema(uid = uid, name = name, privilege = Privilege.PRINCIPAL, institution = it))
+                participant = participantRepository.save(
+                    ParticipantSchema(
+                        uid = uid,
+                        name = name,
+                        privilege = Privilege.PRINCIPAL,
+                        institution = it
+                    )
+                )
             }
         }
         return participant?.let {
@@ -114,7 +121,7 @@ class ParticipantDatabaseGateway(
         subjects: MutableList<Subject>
     ): Question? {
         return participantRepository.findByUid(participantUid)?.let {
-            convert(
+            br.com.udesc.eso.tcc.studytalk.infrastructure.question.gateway.converter.convert(
                 questionRepository.save(
                     QuestionSchema(
                         title = title,

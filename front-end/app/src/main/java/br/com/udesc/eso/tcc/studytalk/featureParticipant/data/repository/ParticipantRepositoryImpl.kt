@@ -314,7 +314,7 @@ class ParticipantRepositoryImpl @Inject constructor(
             response.body()?.let {
                 for (participant in it.participants) {
                     participants.add(
-                        convertToModel(participant)
+                        convertToModel(participant)!!
                     )
                 }
             }

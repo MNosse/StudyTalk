@@ -2,5 +2,4 @@ package br.com.udesc.eso.tcc.studytalk.core.presentation.composable.about.viewmo
 
 sealed class AboutEvent {
     object ChangeMode : AboutEvent()
-    object ClearSnackbarMessage : AboutEvent()
 }

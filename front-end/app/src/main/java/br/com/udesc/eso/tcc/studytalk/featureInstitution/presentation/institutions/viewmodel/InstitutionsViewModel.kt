@@ -1,15 +1,15 @@
 package br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.institutions.viewmodel
 
 import android.content.SharedPreferences
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
-import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.GetAllUseCase
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.InstitutionUseCases
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,13 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class InstitutionsViewModel @Inject constructor(
     private val institutionUseCases: InstitutionUseCases,
-    sharedPreferences: SharedPreferences
-) : StudyTalkViewModel() {
+    sharedPreferences: SharedPreferences,
+    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
+    studyTalkParticipantHandler: StudyTalkParticipantHandler
+) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
 
     private var administratorUid: String
-
-    private val _snackbarMessage: MutableState<UiText> = mutableStateOf(UiText.DynamicString(""))
-    val snackbarMessage: State<UiText> = _snackbarMessage
 
     private val _state = mutableStateOf(InstitutionsState())
     val state: State<InstitutionsState> = _state
@@ -49,26 +48,8 @@ class InstitutionsViewModel @Inject constructor(
                     )
                 }
             } else {
-                exceptionToSnackbarMessages(it.exceptionOrNull()!!.message!!)
+                onEvent(StudyTalkEvent.EnteredExceptionMessage(it.exceptionOrNull()!!.message!!))
             }
         }
     }
-
-    private fun exceptionToSnackbarMessages(exception: String) {
-        val exceptions = Gson().fromJson(
-            exception,
-            Map::class.java
-        )
-        var newSnackbarMessage = ""
-        var count = 0
-        exceptions.forEach { (_, value) ->
-            count++
-            newSnackbarMessage += (value as String)
-            if (count < exceptions.keys.size) {
-                newSnackbarMessage += "\n"
-            }
-        }
-        _snackbarMessage.value = UiText.DynamicString(newSnackbarMessage)
-    }
-
 }

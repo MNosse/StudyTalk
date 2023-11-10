@@ -1,15 +1,20 @@
 package br.com.udesc.eso.tcc.studytalk.participant.integration
 
 import br.com.udesc.eso.tcc.studytalk.core.enums.Privilege
+import br.com.udesc.eso.tcc.studytalk.core.enums.Subject
 import br.com.udesc.eso.tcc.studytalk.entity.administrator.exception.AdministratorNotFoundException
 import br.com.udesc.eso.tcc.studytalk.entity.participant.exception.ParticipantNotFoundException
 import br.com.udesc.eso.tcc.studytalk.entity.participant.exception.ParticipantWithoutPrivilegeException
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.administrator.AdministratorRepository
+import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.answer.AnswerRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.institution.InstitutionRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.participant.ParticipantRepository
+import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.repository.question.QuestionRepository
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.administrator.AdministratorSchema
+import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.answer.AnswerSchema
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.institution.InstitutionSchema
 import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.participant.ParticipantSchema
+import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.question.QuestionSchema
 import br.com.udesc.eso.tcc.studytalk.infrastructure.participant.controller.GetAllParticipantsByInstitutionIdController
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,8 +28,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class GetAllParticipantsByInstitutionIntegrationTest @Autowired constructor(
     private val administratorRepository: AdministratorRepository,
+    private val answerRepository: AnswerRepository,
     private val institutionRepository: InstitutionRepository,
     private val participantRepository: ParticipantRepository,
+    private val questionRepository: QuestionRepository,
     private val getAllParticipantsByInstitutionIdController: GetAllParticipantsByInstitutionIdController
 ) {
     val administratorUid = "VcZSfuTj8ENjztIccfjbK2KRbHf2"
@@ -37,7 +44,7 @@ class GetAllParticipantsByInstitutionIntegrationTest @Autowired constructor(
     fun setup(testInfo: TestInfo) {
         administratorRepository.save(AdministratorSchema(uid = administratorUid))
         val institution = institutionRepository.save(InstitutionSchema(name = "Instituição 1"))
-        participantRepository.save(
+        val participant1 = participantRepository.save(
             ParticipantSchema(
                 uid = participant1Uid,
                 name = participant1Name,
@@ -49,13 +56,34 @@ class GetAllParticipantsByInstitutionIntegrationTest @Autowired constructor(
                 institution = institution
             )
         )
-        participantRepository.save(
+        val participant2 = participantRepository.save(
             ParticipantSchema(
                 uid = participant2Uid,
                 name = participant2Name,
                 institution = institution
             )
         )
+        if (testInfo.displayName == "withValidValues1()") {
+            val question = questionRepository.save(
+                QuestionSchema(
+                    title = "Questão 1",
+                    description = "Descrição da Questão 1",
+                    subjects = mutableListOf(Subject.MATHEMATICS),
+                    institution = institution,
+                    participant = participant1
+                )
+            )
+            val answer = answerRepository.save(
+                AnswerSchema(
+                    description = "Descrição da Resposta 1",
+                    question = question,
+                    participant = participant1
+                )
+            )
+            participant2.favoriteQuestions.add(question)
+            participant2.likedAnswers.add(answer)
+            participantRepository.save(participant2)
+        }
     }
 
     @Test
@@ -69,7 +97,19 @@ class GetAllParticipantsByInstitutionIntegrationTest @Autowired constructor(
             for (participant in response.participants) {
                 assert(
                     (participant.uid == participant1Uid && participant.name == participant1Name && participant.privilege == Privilege.PRINCIPAL)
-                            || (participant.uid == participant2Uid && participant.name == participant2Name && participant.privilege == Privilege.DEFAULT)
+                            || (participant.uid == participant2Uid
+                                        && participant.name == participant2Name
+                                        && participant.privilege == Privilege.DEFAULT
+                                        && participant.favoriteQuestions[0].let {
+                                                it.id == 1L
+                                                        && it.title == "Questão 1"
+                                                        && it.description == "Descrição da Questão 1"
+                                                        && it.subjects[0] == Subject.MATHEMATICS
+                                        }
+                                        && participant.likedAnswers[0].let {
+                                                it.id == 1L
+                                                        && it.description == "Descrição da Resposta 1"
+                                        })
                 )
             }
         }

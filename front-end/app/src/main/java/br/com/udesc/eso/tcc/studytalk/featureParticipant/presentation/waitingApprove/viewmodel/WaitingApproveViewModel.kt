@@ -5,7 +5,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ParticipantUseCases
@@ -16,8 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class WaitingApproveViewModel @Inject constructor(
     private val participantUseCases: ParticipantUseCases,
-    sharedPreferences: SharedPreferences
-) : StudyTalkViewModel() {
+    sharedPreferences: SharedPreferences,
+    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
+    studyTalkParticipantHandler: StudyTalkParticipantHandler
+) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
 
     private val _currentUid = mutableStateOf("")
     val currentUid: State<String> = _currentUid
