@@ -1,17 +1,16 @@
 package br.com.udesc.eso.tcc.studytalk.core.data.repository
 
+import android.content.Context
+import android.net.ConnectivityManager
+import javax.inject.Inject
+
 
 open class BaseRepositoryImpl {
 
-//    @Inject
-//    lateinit private var connectivityManager: ConnectivityManager
-
-    protected fun isOnline(): Boolean {
-//        if (connectivityManager.activeNetworkInfo?.isConnected == true) {
-//            return true
-//        }
-//        return false
-        return true
+    protected fun isOnline(context: Context): Boolean {
+        val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities =  connManager.getNetworkCapabilities(connManager.activeNetwork)
+        return networkCapabilities != null
     }
 
 }

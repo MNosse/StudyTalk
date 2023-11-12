@@ -6,5 +6,7 @@ data class ParticipantUseCases(
     val changeAnAnswerLikeStatusUseCase: ChangeAnAnswerLikeStatusUseCase,
     val createUseCase: CreateUseCase,
     val doAQuestionUseCase: DoAQuestionUseCase,
+    val getAllByInstitutionUseCase: GetAllByInstitutionUseCase,
+    val getAllUseCase: GetAllUseCase,
     val getByUidUseCase: GetByUidUseCase
 )

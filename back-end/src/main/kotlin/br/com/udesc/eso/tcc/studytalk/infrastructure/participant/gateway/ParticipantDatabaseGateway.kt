@@ -84,7 +84,7 @@ class ParticipantDatabaseGateway(
     override fun create(registrationCode: String, uid: String, name: String): Participant? {
         var participant: ParticipantSchema? = null
         institutionRepository.findByRegistrationCode(registrationCode)?.let {
-            if (participantRepository.findAllByInstitutionId(it.id).size > 0) {
+            if (participantRepository.findAllByInstitutionIdOrderById(it.id).size > 0) {
                 participant = participantRepository.save(ParticipantSchema(uid = uid, name = name))
                 enrollmentRequestRepository.save(
                     EnrollmentRequestSchema(
@@ -142,7 +142,7 @@ class ParticipantDatabaseGateway(
     }
 
     override fun getAllByInstitutionId(id: Long): MutableList<Participant> {
-        return participantRepository.findAllByInstitutionId(id).map {
+        return participantRepository.findAllByInstitutionIdOrderById(id).map {
             convert(it)
         }.toMutableList()
     }

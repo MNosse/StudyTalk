@@ -19,15 +19,13 @@ class InstitutionsViewModel @Inject constructor(
     private val institutionUseCases: InstitutionUseCases,
     studyTalkAdministratorHandler: StudyTalkAdministratorHandler
 ) : StudyTalkViewModel() {
-
-    private var administratorUid: String
+    private val administratorUid: String
 
     private val _state = mutableStateOf(InstitutionsState())
     val state: State<InstitutionsState> = _state
 
     init {
         administratorUid = studyTalkAdministratorHandler.currentAdministrator!!.uid
-
         viewModelScope.launch {
             getInstitutions()
         }
@@ -40,9 +38,9 @@ class InstitutionsViewModel @Inject constructor(
             )
         ).result.let {
             if (it.isSuccess) {
-                it.getOrNull()!!.let {
+                it.getOrNull()!!.let { institutions ->
                     _state.value = state.value.copy(
-                        institutions = it
+                        institutions = institutions.reversed()
                     )
                 }
             } else {

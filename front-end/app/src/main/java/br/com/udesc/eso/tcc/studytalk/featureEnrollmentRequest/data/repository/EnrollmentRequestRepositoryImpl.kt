@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.converter.convertToModel
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.dataSource.LocalEnrollmentRequestDataSource
@@ -15,6 +16,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class EnrollmentRequestRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localEnrollmentRequestDataSource: LocalEnrollmentRequestDataSource,
     private val localInstitutionDataSource: LocalInstitutionDataSource,
     private val localParticipantDataSource: LocalParticipantDataSource,
@@ -42,7 +44,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
         requestingParticipantUid: String
     ): Result<MutableList<EnrollmentRequest>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(
                     remoteEnrollmentRequestDataSource.getAllByInstitution(
                         id = id,
@@ -67,7 +69,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
         requestingParticipantUid: String
     ): Result<EnrollmentRequest?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteEnrollmentRequestDataSource.getById(
                         id = id,
@@ -92,7 +94,7 @@ class EnrollmentRequestRepositoryImpl @Inject constructor(
         requestingParticipantUid: String
     ): Result<EnrollmentRequest?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteEnrollmentRequestDataSource.getByParticipant(
                         id = id,

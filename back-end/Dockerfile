@@ -1,3 +1,9 @@
+FROM postgres:latest
+
+ENV POSTGRES_DB=studytalk
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+
 FROM gradle:8.2.1-jdk17 AS build
 
 COPY . /studytalk

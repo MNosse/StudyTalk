@@ -19,7 +19,7 @@ class FavoritedViewModel @Inject constructor(
     }
 
     fun reload() {
-        val currentParticipant = studyTalkParticipantHandler.currentParticipant?.copy()
+        val currentParticipant = studyTalkParticipantHandler.currentParticipant!!.copy()
         _state.value = state.value.copy(
             questions = currentParticipant!!.favoriteQuestions.reversed()
         )

@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.converter.convertToModel
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.converter.convertToRoomEntity
@@ -8,10 +9,12 @@ import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.dataSource.Remot
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.request.CreateAdministratorRequest
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.model.Administrator
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.repository.AdministratorRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
 class AdministratorRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localAdministratorDataSource: LocalAdministratorDataSource,
     private val remoteAdministratorDataSource: RemoteAdministratorDataSource
 ) : AdministratorRepository, BaseRepositoryImpl() {
@@ -37,7 +40,7 @@ class AdministratorRepositoryImpl @Inject constructor(
 
     override suspend fun getAdministratorByUid(uid: String): Result<Administrator?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 val response = remoteAdministratorDataSource.getByUid(uid = uid)
                 if (response.isSuccessful) {
                     response.body()!!.let {

@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureInstitution.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.converter.convertToModel
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.LocalInstitutionDataSource
@@ -15,6 +16,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class InstitutionRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localInstitutionDataSource: LocalInstitutionDataSource,
     private val remoteInstitutionDataSource: RemoteInstitutionDataSource
 ) : InstitutionRepository, BaseRepositoryImpl() {
@@ -62,7 +64,7 @@ class InstitutionRepositoryImpl @Inject constructor(
 
     override suspend fun getAll(administratorUid: String): Result<MutableList<Institution>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(remoteInstitutionDataSource.getAll(administratorUid = administratorUid))
             } else {
                 getAllLocal(localInstitutionDataSource.getAll(administratorUid = administratorUid))
@@ -78,7 +80,7 @@ class InstitutionRepositoryImpl @Inject constructor(
         isAdministrator: Boolean
     ): Result<Institution?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteInstitutionDataSource.getById(
                         id = id,
@@ -107,7 +109,7 @@ class InstitutionRepositoryImpl @Inject constructor(
         isAdministrator: Boolean
     ): Result<Institution?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteInstitutionDataSource.getByRegistrationCode(
                         registrationCode = registrationCode,

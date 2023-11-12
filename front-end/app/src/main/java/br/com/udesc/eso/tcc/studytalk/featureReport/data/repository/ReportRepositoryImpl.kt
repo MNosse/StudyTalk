@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureReport.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.LocalInstitutionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureReport.data.converter.convertToModel
@@ -16,6 +17,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localInstitutionDataSource: LocalInstitutionDataSource,
     private val localReportDataSource: LocalReportDataSource,
     private val remoteReportDataSource: RemoteReportDataSource
@@ -74,7 +76,7 @@ class ReportRepositoryImpl @Inject constructor(
         requestingParticipantUid: String
     ): Result<MutableList<Report>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(
                     remoteReportDataSource.getAllByInstitution(
                         id = id,
@@ -99,7 +101,7 @@ class ReportRepositoryImpl @Inject constructor(
         requestingParticipantUid: String
     ): Result<Report?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteReportDataSource.getById(
                         id = id,

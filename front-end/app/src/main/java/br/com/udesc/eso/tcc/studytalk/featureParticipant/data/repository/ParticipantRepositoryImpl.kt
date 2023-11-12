@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureParticipant.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.core.domain.model.Privilege
 import br.com.udesc.eso.tcc.studytalk.core.domain.model.Subject
@@ -24,6 +25,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ParticipantRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localAnswerDataSource: LocalAnswerDataSource,
     private val localInstitutionDataSource: LocalInstitutionDataSource,
     private val localParticipantDataSource: LocalParticipantDataSource,
@@ -178,7 +180,7 @@ class ParticipantRepositoryImpl @Inject constructor(
         institutionId: Long
     ): Result<MutableList<Participant>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(
                     remoteParticipantDataSource.getAllByInstitution(
                         institutionId = institutionId,
@@ -203,7 +205,7 @@ class ParticipantRepositoryImpl @Inject constructor(
 
     override suspend fun getAll(administratorUid: String): Result<MutableList<Participant>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(remoteParticipantDataSource.getAll(administratorUid = administratorUid))
             } else {
                 getAllLocal(localParticipantDataSource.getAll(administratorUid = administratorUid))
@@ -219,7 +221,7 @@ class ParticipantRepositoryImpl @Inject constructor(
         participantToBeRetrievedUid: String
     ): Result<Participant?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteParticipantDataSource.getByUid(
                         participantToBeRetrievedUid = participantToBeRetrievedUid,

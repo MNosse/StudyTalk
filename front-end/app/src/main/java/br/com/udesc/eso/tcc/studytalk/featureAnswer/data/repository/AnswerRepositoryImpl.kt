@@ -1,5 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.featureAnswer.data.repository
 
+import android.content.Context
 import br.com.udesc.eso.tcc.studytalk.core.data.repository.BaseRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.converter.convertToModel
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.dataSource.LocalAnswerDataSource
@@ -16,6 +17,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class AnswerRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val localAnswerDataSource: LocalAnswerDataSource,
     private val localParticipantDataSource: LocalParticipantDataSource,
     private val localQuestionDataSource: LocalQuestionDataSource,
@@ -43,7 +45,7 @@ class AnswerRepositoryImpl @Inject constructor(
         participantUid: String
     ): Result<MutableList<Answer>> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getAllRemote(
                     remoteAnswerDataSource.getAllByQuestion(
                         id = id,
@@ -65,7 +67,7 @@ class AnswerRepositoryImpl @Inject constructor(
 
     override suspend fun getById(id: Long, participantUid: String): Result<Answer?> {
         return try {
-            if (isOnline()) {
+            if (isOnline(context)) {
                 getRemote(
                     remoteAnswerDataSource.getById(
                         id = id,

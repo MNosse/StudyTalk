@@ -165,10 +165,12 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAdministratorRepository(
+        @ApplicationContext context: Context,
         localAdministratorDataSource: LocalAdministratorDataSource,
         remoteAdministratorDataSource: RemoteAdministratorDataSource
     ): AdministratorRepository {
         return AdministratorRepositoryImpl(
+            context = context,
             localAdministratorDataSource = localAdministratorDataSource,
             remoteAdministratorDataSource = remoteAdministratorDataSource
         )
@@ -177,12 +179,14 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAnswerRepository(
+        @ApplicationContext context: Context,
         localAnswerDataSource: LocalAnswerDataSource,
         localParticipantDataSource: LocalParticipantDataSource,
         localQuestionDataSource: LocalQuestionDataSource,
         remoteAnswerDataSource: RemoteAnswerDataSource
     ): AnswerRepository {
         return AnswerRepositoryImpl(
+            context = context,
             localAnswerDataSource = localAnswerDataSource,
             localParticipantDataSource = localParticipantDataSource,
             localQuestionDataSource = localQuestionDataSource,
@@ -193,12 +197,14 @@ class AppModule {
     @Provides
     @Singleton
     fun provideEnrollmentRequestRepository(
+        @ApplicationContext context: Context,
         localEnrollmentRequestDataSource: LocalEnrollmentRequestDataSource,
         localInstitutionDataSource: LocalInstitutionDataSource,
         localParticipantDataSource: LocalParticipantDataSource,
         remoteEnrollmentRequestDataSource: RemoteEnrollmentRequestDataSource
     ): EnrollmentRequestRepository {
         return EnrollmentRequestRepositoryImpl(
+            context = context,
             localEnrollmentRequestDataSource = localEnrollmentRequestDataSource,
             localInstitutionDataSource = localInstitutionDataSource,
             localParticipantDataSource = localParticipantDataSource,
@@ -209,10 +215,12 @@ class AppModule {
     @Provides
     @Singleton
     fun provideInstitutionRepository(
+        @ApplicationContext context: Context,
         localInstitutionDataSource: LocalInstitutionDataSource,
         remoteInstitutionDataSource: RemoteInstitutionDataSource
     ): InstitutionRepository {
         return InstitutionRepositoryImpl(
+            context = context,
             localInstitutionDataSource = localInstitutionDataSource,
             remoteInstitutionDataSource = remoteInstitutionDataSource
         )
@@ -221,6 +229,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideParticipantRepository(
+        @ApplicationContext context: Context,
         localAnswerDataSource: LocalAnswerDataSource,
         localInstitutionDataSource: LocalInstitutionDataSource,
         localParticipantDataSource: LocalParticipantDataSource,
@@ -228,6 +237,7 @@ class AppModule {
         remoteParticipantDataSource: RemoteParticipantDataSource
     ): ParticipantRepository {
         return ParticipantRepositoryImpl(
+            context = context,
             localAnswerDataSource = localAnswerDataSource,
             localInstitutionDataSource = localInstitutionDataSource,
             localParticipantDataSource = localParticipantDataSource,
@@ -239,12 +249,14 @@ class AppModule {
     @Provides
     @Singleton
     fun provideQuestionRepository(
+        @ApplicationContext context: Context,
         localInstitutionDataSource: LocalInstitutionDataSource,
         localParticipantDataSource: LocalParticipantDataSource,
         localQuestionDataSource: LocalQuestionDataSource,
         remoteQuestionDataSource: RemoteQuestionDataSource
     ): QuestionRepository {
         return QuestionRepositoryImpl(
+            context = context,
             localInstitutionDataSource = localInstitutionDataSource,
             localParticipantDataSource = localParticipantDataSource,
             localQuestionDataSource = localQuestionDataSource,
@@ -255,11 +267,13 @@ class AppModule {
     @Provides
     @Singleton
     fun provideReportRepository(
+        @ApplicationContext context: Context,
         localInstitutionDataSource: LocalInstitutionDataSource,
         localReportDataSource: LocalReportDataSource,
         remoteReportDataSource: RemoteReportDataSource
     ): ReportRepository {
         return ReportRepositoryImpl(
+            context = context,
             localInstitutionDataSource = localInstitutionDataSource,
             localReportDataSource = localReportDataSource,
             remoteReportDataSource = remoteReportDataSource
@@ -351,6 +365,12 @@ class AppModule {
                 repository
             ),
             doAQuestionUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.DoAQuestionUseCase(
+                repository
+            ),
+            getAllByInstitutionUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetAllByInstitutionUseCase(
+                repository
+            ),
+            getAllUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetAllUseCase(
                 repository
             ),
             getByUidUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase(
