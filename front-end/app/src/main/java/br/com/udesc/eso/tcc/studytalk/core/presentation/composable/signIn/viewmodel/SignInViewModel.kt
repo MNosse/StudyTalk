@@ -5,9 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.initial.InitialScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
 import br.com.udesc.eso.tcc.studytalk.core.utils.localizeFirebaseAuthErrorMessages
@@ -20,10 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+    private val sharedPreferences: SharedPreferences
+) : StudyTalkViewModel() {
 
     private val _email = mutableStateOf("")
     val email: State<String> = _email

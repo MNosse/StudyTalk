@@ -19,15 +19,14 @@ import javax.inject.Inject
 class WaitingApproveViewModel @Inject constructor(
     private val participantUseCases: ParticipantUseCases,
     sharedPreferences: SharedPreferences,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+) : StudyTalkViewModel() {
 
     private val _currentUid = mutableStateOf("")
     val currentUid: State<String> = _currentUid
 
     init {
-        _currentUid.value = sharedPreferences.getString("current_uid", "")!!
+        _currentUid.value = studyTalkParticipantHandler.currentParticipant!!.uid
         viewModelScope.launch { checkApprovedState() }
     }
 

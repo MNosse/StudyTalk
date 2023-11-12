@@ -66,7 +66,7 @@ fun QuestionsScreen(
                             StudyTalkQuestion(
                                 text = question.title,
                                 onClick = {
-                                    navController.navigate(BaseScreens.AddEditViewQuestionScreen.route + "?questionId=${question.id}")
+                                    navController.navigate(BaseScreens.AddEditViewQuestionScreen.route + "?questionId=${question.id}&backRoute=${BaseScreens.QuestionsScreen.route}")
                                 }
                             )
                         }

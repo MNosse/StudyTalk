@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
@@ -23,9 +22,8 @@ class AddEditAnswerViewModel @Inject constructor(
     private val answerUseCases: AnswerUseCases,
     private val participantUseCases: ParticipantUseCases,
     savedStateHandle: SavedStateHandle,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
     studyTalkParticipantHandler: StudyTalkParticipantHandler,
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+) : StudyTalkViewModel() {
     private val currentAnswerId: Long
 
     private val currentQuestionId: Long
@@ -39,7 +37,7 @@ class AddEditAnswerViewModel @Inject constructor(
     val editMode: State<Boolean> = _editMode
 
     init {
-        val currentParticipant = currentParticipant?.copy()
+        val currentParticipant = studyTalkParticipantHandler.currentParticipant?.copy()
         currentUid = currentParticipant!!.uid
 
         currentQuestionId = savedStateHandle.get<Long>("questionId")!!

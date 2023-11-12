@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
@@ -21,9 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EnrollmentRequestiesViewModel @Inject constructor(
     private val enrollmentRequestUseCases: EnrollmentRequestUseCases,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+    private val studyTalkParticipantHandler: StudyTalkParticipantHandler
+) : StudyTalkViewModel() {
     private val _currentInstitutionId = mutableLongStateOf(-1L)
     val currentInstitutionId: State<Long> = _currentInstitutionId
 
@@ -34,7 +32,7 @@ class EnrollmentRequestiesViewModel @Inject constructor(
     val state: State<EnrollmentRequestiesState> = _state
 
     init {
-        val currentParticipant = currentParticipant?.copy()
+        val currentParticipant = studyTalkParticipantHandler.currentParticipant?.copy()
         _currentInstitutionId.longValue = currentParticipant?.institution!!.id
         _currentUid.value = currentParticipant.uid
         viewModelScope.launch {

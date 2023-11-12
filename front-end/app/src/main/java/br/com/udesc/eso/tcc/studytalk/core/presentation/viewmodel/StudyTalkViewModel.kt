@@ -8,17 +8,7 @@ import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.model.Administ
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.model.Participant
 import com.google.gson.Gson
 
-open class StudyTalkViewModel constructor(
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : ViewModel() {
-
-    private val _currentAdministrator = studyTalkAdministratorHandler.currentAdministrator
-    val currentAdministrator: Administrator? = _currentAdministrator
-
-    private val _currentParticipant = studyTalkParticipantHandler.currentParticipant
-    val currentParticipant: Participant? = _currentParticipant
-
+open class StudyTalkViewModel : ViewModel() {
     private val _messageHandler = StudyTalkMessageHandler
     val message: State<UiText> = _messageHandler.message
 

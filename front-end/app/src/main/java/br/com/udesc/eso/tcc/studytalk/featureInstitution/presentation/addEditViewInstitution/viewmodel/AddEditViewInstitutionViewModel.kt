@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.CreateUseCase
@@ -25,10 +24,8 @@ import javax.inject.Inject
 class AddEditViewInstitutionViewModel @Inject constructor(
     private val institutionUseCases: InstitutionUseCases,
     savedStateHandle: SavedStateHandle,
-    sharedPreferences: SharedPreferences,
     studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+) : StudyTalkViewModel() {
 
     private val _administratorUid = mutableStateOf("")
     val administratorUid: State<String> = _administratorUid
@@ -46,7 +43,7 @@ class AddEditViewInstitutionViewModel @Inject constructor(
     val registrationCode: State<String> = _registrationCode
 
     init {
-        _administratorUid.value = sharedPreferences.getString("current_uid", "")!!
+        _administratorUid.value = studyTalkAdministratorHandler.currentAdministrator!!.uid
 
         savedStateHandle.get<Long>("institutionId")?.let { institutionId ->
             if (institutionId != -1L) {

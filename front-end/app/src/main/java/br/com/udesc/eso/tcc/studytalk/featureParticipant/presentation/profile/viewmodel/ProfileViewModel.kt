@@ -1,14 +1,11 @@
 package br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.profile.viewmodel
 
-import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.initial.InitialScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
@@ -23,9 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val participantUseCases: ParticipantUseCases,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+) : StudyTalkViewModel() {
 
     private val _name = mutableStateOf("")
     val name: State<String> = _name
@@ -43,12 +39,12 @@ class ProfileViewModel @Inject constructor(
     val registrationCode: State<String> = _registrationCode
 
     init {
-        if (currentParticipant != null) {
-            val currentParticipant = currentParticipant.copy()
+        studyTalkParticipantHandler.currentParticipant?.let { participant ->
+            val currentParticipant = participant.copy()
             _currentParticipantId.longValue = currentParticipant.id
             _currentUid.value = currentParticipant.uid
             _name.value = currentParticipant.name
-        } else {
+        } ?: {
             _currentUid.value = FirebaseAuth.getInstance().uid!!
         }
     }

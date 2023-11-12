@@ -1,7 +1,6 @@
 package br.com.udesc.eso.tcc.studytalk.core.presentation.composable.home.view
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -11,11 +10,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,8 @@ import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.St
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTopAppBar
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.home.viewmodel.HomeViewModel
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.presentation.enrollmentRequesties.view.EnrollmentRequestiesScreen
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.participants.viewmodel.ParticipantsViewModel
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.favorited.view.FavoritedScreen
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.published.view.PublishedScreen
 
 @Composable
 fun HomeScreen(
@@ -36,7 +36,7 @@ fun HomeScreen(
 ) {
     val currentPrivilege = viewModel.currentPrivilege.value
     val snackbarHostState = remember { SnackbarHostState() }
-    val tabIndex = remember { mutableIntStateOf(0) }
+    val tabIndex = rememberSaveable { mutableIntStateOf(0) }
     val tabs = mutableListOf<String>().apply {
         add("Publicadas")
         add("Favoritas")
@@ -74,9 +74,17 @@ fun HomeScreen(
                     }
                 }
                 when (tabIndex.intValue) {
-                    0 -> { }
-                    1 -> {}
-                    2 -> { EnrollmentRequestiesScreen() }
+                    0 -> {
+                        PublishedScreen(navController)
+                    }
+
+                    1 -> {
+                        FavoritedScreen(navController)
+                    }
+
+                    2 -> {
+                        EnrollmentRequestiesScreen()
+                    }
                 }
             }
         },

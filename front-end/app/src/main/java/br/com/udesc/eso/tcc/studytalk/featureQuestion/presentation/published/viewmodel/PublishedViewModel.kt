@@ -1,7 +1,6 @@
-package br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.viewmodel
+package br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.published.viewmodel
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
@@ -9,44 +8,43 @@ import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParti
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.GetAllByInstitutionUseCase
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.QuestionUseCases
+import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.favorited.viewmodel.FavoritedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionsViewModel @Inject constructor(
-    private val questionUseCases: QuestionUseCases,
+class PublishedViewModel @Inject constructor(
+    private val questionUseCase: QuestionUseCases,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
 ) : StudyTalkViewModel() {
-    private val _currentInstitutionId = mutableLongStateOf(-1L)
-    val currentInstitutionId: State<Long> = _currentInstitutionId
+    private val currentInstitutionId: Long
+    private val currentParticipantUid: String
 
-    private val _currentUid = mutableStateOf("")
-    val currentUid: State<String> = _currentUid
-
-    private val _state = mutableStateOf(QuestionsState())
-    val state: State<QuestionsState> = _state
+    private val _state = mutableStateOf(FavoritedState())
+    val state: State<FavoritedState> = _state
 
     init {
         val currentParticipant = studyTalkParticipantHandler.currentParticipant!!.copy()
-        _currentInstitutionId.longValue = currentParticipant.institution!!.id
-        _currentUid.value = currentParticipant.uid
+        currentInstitutionId = currentParticipant.institution!!.id
+        currentParticipantUid = currentParticipant.uid
         viewModelScope.launch {
             getQuestions()
         }
     }
 
     private suspend fun getQuestions() {
-        questionUseCases.getAllByInstitutionUseCase(
+        questionUseCase.getAllByInstitutionUseCase(
             input = GetAllByInstitutionUseCase.Input(
-                id = currentInstitutionId.value,
-                participantUid = currentUid.value
+                id = currentInstitutionId,
+                participantUid = currentParticipantUid
             )
         ).result.let { result ->
             if (result.isSuccess) {
                 result.getOrNull()!!.let { questions ->
                     _state.value = state.value.copy(
-                        questions = questions.reversed()
+                        questions = questions.filter { it.participant!!.uid == currentParticipantUid }
+                            .reversed()
                     )
                 }
             } else {

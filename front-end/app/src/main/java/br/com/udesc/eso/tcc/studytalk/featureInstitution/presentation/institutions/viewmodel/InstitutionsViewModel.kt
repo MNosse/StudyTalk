@@ -17,10 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class InstitutionsViewModel @Inject constructor(
     private val institutionUseCases: InstitutionUseCases,
-    sharedPreferences: SharedPreferences,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+    studyTalkAdministratorHandler: StudyTalkAdministratorHandler
+) : StudyTalkViewModel() {
 
     private var administratorUid: String
 
@@ -28,7 +26,7 @@ class InstitutionsViewModel @Inject constructor(
     val state: State<InstitutionsState> = _state
 
     init {
-        administratorUid = sharedPreferences.getString("current_uid", "")!!
+        administratorUid = studyTalkAdministratorHandler.currentAdministrator!!.uid
 
         viewModelScope.launch {
             getInstitutions()

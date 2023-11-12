@@ -113,13 +113,19 @@ class BaseActivity : ComponentActivity() {
                                         bottomNavigationBarVisibility.value = false
                                     }
                                     composable(
-                                        route = BaseScreens.AddEditViewQuestionScreen.route + "?questionId={questionId}",
+                                        route = BaseScreens.AddEditViewQuestionScreen.route + "?questionId={questionId}&backRoute={backRoute}",
                                         arguments = listOf(
                                             navArgument(
                                                 name = "questionId"
                                             ) {
                                                 type = NavType.LongType
                                                 defaultValue = -1L
+                                            },
+                                            navArgument(
+                                                name = "backRoute"
+                                            ) {
+                                                type = NavType.StringType
+                                                defaultValue = ""
                                             }
                                         )
                                     ) {

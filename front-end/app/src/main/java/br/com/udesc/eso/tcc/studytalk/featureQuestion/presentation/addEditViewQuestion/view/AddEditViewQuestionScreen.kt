@@ -89,7 +89,7 @@ fun AddEditViewQuestionScreen(
     DisposableEffect(context) {
         val backCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                navController.popBackStack(route = BaseScreens.QuestionsScreen.route, inclusive = false)
+                navController.popBackStack(route = viewModel.currentBackRoute.value, inclusive = false)
             }
         }
 
@@ -105,7 +105,7 @@ fun AddEditViewQuestionScreen(
             StudyTalkTopAppBar(
                 title = stringResource(R.string.question),
                 hasNavBack = true,
-                navBackAction = { navController.popBackStack(route = BaseScreens.QuestionsScreen.route, inclusive = false) },
+                navBackAction = { navController.popBackStack(route = viewModel.currentBackRoute.value, inclusive = false) },
                 actions = if (questionId != -1L && !editMode) {
                     val items = mutableListOf<StudyTalkTopAppBarDropdownMenuItem>().apply {
                         add(

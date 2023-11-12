@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.domain.model.Subject
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
@@ -35,11 +34,13 @@ class AddEditViewQuestionViewModel @Inject constructor(
     private val participantUseCases: ParticipantUseCases,
     private val questionUseCases: QuestionUseCases,
     savedStateHandle: SavedStateHandle,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+) : StudyTalkViewModel() {
     private val _isOwner = mutableStateOf(false)
     val isOwner: State<Boolean> = _isOwner
+
+    private val _currentBackRoute = CurrentBackRoute
+    val currentBackRoute: State<String> = _currentBackRoute.route
 
     private val _currentQuestionId = mutableLongStateOf(-1L)
     val currentQuestionId: State<Long> = _currentQuestionId
@@ -69,10 +70,14 @@ class AddEditViewQuestionViewModel @Inject constructor(
     val title: State<String> = _title
 
     init {
-        val currentParticipant = currentParticipant?.copy()
-        _currentParticipantUid.value = currentParticipant!!.uid
-
+        val currentParticipant = studyTalkParticipantHandler.currentParticipant!!.copy()
+        _currentParticipantUid.value = currentParticipant.uid
         _currentQuestionId.longValue = savedStateHandle.get<Long>("questionId")!!
+        savedStateHandle.get<String>("backRoute")!!.let { route ->
+            if (route.isNotBlank()) {
+                _currentBackRoute.route.value = route
+            }
+        }
 
         if (currentQuestionId.value != -1L) {
             runBlocking {
@@ -84,7 +89,8 @@ class AddEditViewQuestionViewModel @Inject constructor(
                 ).result.let {
                     if (it.isSuccess) {
                         it.getOrNull()!!.also { question ->
-                            _isOwner.value = question.participant!!.uid == currentParticipantUid.value
+                            _isOwner.value =
+                                question.participant!!.uid == currentParticipantUid.value
                             _title.value = question.title
                             _description.value = question.description
                             _selectedSubjects.clear()
@@ -311,4 +317,8 @@ class AddEditViewQuestionViewModel @Inject constructor(
             )
         }
     }
+}
+
+object CurrentBackRoute {
+    var route = mutableStateOf(BaseScreens.QuestionsScreen.route)
 }

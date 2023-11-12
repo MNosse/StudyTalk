@@ -4,9 +4,7 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import br.com.udesc.eso.tcc.studytalk.R
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
-import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,10 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AboutViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
-    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
-    studyTalkParticipantHandler: StudyTalkParticipantHandler
-) : StudyTalkViewModel(studyTalkAdministratorHandler, studyTalkParticipantHandler) {
+    private val sharedPreferences: SharedPreferences
+) : StudyTalkViewModel() {
 
     private val _newMode = mutableStateOf("Administrador")
     val newMode: State<String> = _newMode
