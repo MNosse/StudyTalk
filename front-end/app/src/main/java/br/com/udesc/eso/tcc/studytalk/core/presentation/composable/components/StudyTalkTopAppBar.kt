@@ -47,7 +47,7 @@ fun StudyTalkTopAppBar(
                 IconButton(onClick = { actions.onClick(!actions.expanded) }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
-                        contentDescription = stringResource(R.string.top_app_bar_dropdown_menu_content_description),
+                        contentDescription = stringResource(R.string.more_menu),
                         tint = MaterialTheme.colorScheme.surface
                     )
                 }

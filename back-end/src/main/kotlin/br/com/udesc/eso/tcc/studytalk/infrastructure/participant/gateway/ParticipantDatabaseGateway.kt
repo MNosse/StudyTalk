@@ -30,7 +30,7 @@ class ParticipantDatabaseGateway(
     override fun answerAQuestion(participantUid: String, questionId: Long, description: String): Answer? {
         return participantRepository.findByUid(participantUid)?.let { participant ->
             questionRepository.findById(questionId).getOrNull()?.let {
-                convert(
+                br.com.udesc.eso.tcc.studytalk.infrastructure.answer.gateway.converter.convert(
                     answerRepository.save(
                         AnswerSchema(
                             description = description,

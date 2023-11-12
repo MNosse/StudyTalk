@@ -2,9 +2,14 @@
     <string name="app_name">StudyTalk</string>
 
     <!-- Actions -->
+    <string name="add">Adicionar</string>
+    <string name="approve">Aprovar</string>
     <string name="cancel">Cancelar</string>
     <string name="create">Cadastrar</string>
+    <string name="edit">Editar</string>
     <string name="exclude">Excluir</string>
+    <string name="report">Denunciar</string>
+    <string name="reprove">Reprovar</string>
     <string name="save">Salvar</string>
     
     <!-- Content Description -->
@@ -13,7 +18,7 @@
     <string name="institution_fab_content_description">Cadastrar instituição</string>
     <string name="participant_fab_content_description">Cadastrar participante</string>
     <string name="questions_fab_content_description">Adicionar questão</string>
-    <string name="top_app_bar_dropdown_menu_content_description">Opções</string>
+    <string name="more_menu">Opções</string>
     <string name="top_app_bar_dropdown_menu_item_about_content_description">Sobre</string>
     <string name="top_app_bar_dropdown_menu_item_edit_content_description">Editar</string>
     <string name="top_app_bar_dropdown_menu_item_fav_content_description">Favoritar</string>
@@ -47,16 +52,22 @@
     <string name="delete_dialog_button">Excluir</string>
 
     <!-- Entity -->
-    <string name="institution">Instituição</string>
+    <string name="answer">Resposta</string>
+    <string name="answers">Respostas</string>
+    <string name="enrollment_request">Solicitação de Cadastro</string>
+    <string name="enrollment_requesties">Solicitações de Cadastro</string>
     <string name="favorite">Favorito</string>
+    <string name="institution">Instituição</string>
     <string name="like">Curtida</string>
     <string name="question">Questão</string>
 
     <!-- Entity State -->
+    <string name="approved">aprovad%1$s</string>
     <string name="created">criad%1$s</string>
     <string name="deleted">deletad%1$s</string>
     <string name="added">adicionad%1$s</string>
     <string name="removed">removid%1$s</string>
+    <string name="reproved">reprovad%1$s</string>
     <string name="updated">atualizad%1$s</string>
 
     <!-- Failed Message -->
@@ -82,9 +93,13 @@
     <!-- Screen Text -->
     <string name="about_description_text">O StudyTalk é uma aplicação que busca auxiliar na educação de estudates através do debate. Aqui você encontrará uma vasta biblioteca de perguntas e respostas.</string>
     <string name="about_developed_by_text">Desenvolvido por: Mateus Coelho Nosse</string>
+    <string name="welcome">Bem-vindo ao StudyTalk</string>
 
     <!-- Snackbar Messages -->
     <string name="generic_snackbar_message">%1$s %2$s com sucesso.</string>
+
+    <!-- State -->
+    <string name="no_results">Sem resultados</string>
 
     <!-- TextField Labels -->
     <string name="description_label">Descrição</string>
@@ -103,7 +118,6 @@
     <!-- TopAppBar Title -->
     <string name="about_top_app_bar_title">Sobre</string>
     <string name="enrollment_request_top_app_bar_title">Solicitação de Cadastro</string>
-    <string name="enrollment_requesties_top_app_bar_title">Solicitações de Cadastro</string>
     <string name="institution_top_app_bar_title">Instituição</string>
     <string name="institutions_top_app_bar_title">Instituições</string>
     <string name="participants_top_app_bar_title">Participantes</string>

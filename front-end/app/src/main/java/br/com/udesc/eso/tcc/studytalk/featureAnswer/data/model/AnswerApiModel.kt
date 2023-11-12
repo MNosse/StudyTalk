@@ -8,8 +8,8 @@ class AnswerApiModel(
     val id: Long,
     var description: String,
     var likeCount: Int,
-    val question: QuestionApiModel,
-    val participant: ParticipantApiModel
+    val question: QuestionApiModel? = null,
+    val participant: ParticipantApiModel? = null
 ) : Postable {
     override fun getPostDescription(): String {
         return description

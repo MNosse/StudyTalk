@@ -4,5 +4,5 @@ import br.com.udesc.eso.tcc.studytalk.infrastructure.config.db.schema.question.Q
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface QuestionRepository : JpaRepository<QuestionSchema, Long> {
-    fun findAllByInstitutionId(id: Long): MutableList<QuestionSchema>
+    fun findAllByInstitutionIdOrderById(id: Long): MutableList<QuestionSchema>
 }

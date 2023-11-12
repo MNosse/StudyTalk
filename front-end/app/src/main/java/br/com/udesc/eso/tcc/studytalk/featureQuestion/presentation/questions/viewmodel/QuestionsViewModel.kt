@@ -48,7 +48,7 @@ class QuestionsViewModel @Inject constructor(
             if (result.isSuccess) {
                 result.getOrNull()!!.let { questions ->
                     _state.value = state.value.copy(
-                        questions = questions
+                        questions = questions.reversed()
                     )
                 }
             } else {

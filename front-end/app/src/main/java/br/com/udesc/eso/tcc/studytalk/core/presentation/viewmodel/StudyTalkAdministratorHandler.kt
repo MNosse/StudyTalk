@@ -14,11 +14,13 @@ class StudyTalkAdministratorHandler(
     private val _currentAdministrator: Administrator?
         get() {
             return runBlocking {
-                administratorUseCases.getByUidUseCase(
-                    br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.GetByUidUseCase.Input(
-                        uid = FirebaseAuth.getInstance().uid!!
-                    )
-                ).result.getOrNull()
+                FirebaseAuth.getInstance().uid?.let { uid ->
+                    administratorUseCases.getByUidUseCase(
+                        br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.GetByUidUseCase.Input(
+                            uid = uid
+                        )
+                    ).result.getOrNull()
+                }
             }
         }
     val currentAdministrator: Administrator? = _currentAdministrator

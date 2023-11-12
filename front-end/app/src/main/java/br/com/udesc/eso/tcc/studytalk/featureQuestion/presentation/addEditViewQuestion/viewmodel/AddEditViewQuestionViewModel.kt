@@ -10,10 +10,14 @@ import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.domain.model.Subject
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.core.utils.UiText
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.AnswerUseCases
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.GetAllByQuestionUseCase
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ChangeAQuestionFavoriteStatusUseCase
+import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ChangeAnAnswerLikeStatusUseCase
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.DoAQuestionUseCase
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ParticipantUseCases
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.domain.useCase.DeleteUseCase
@@ -27,6 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditViewQuestionViewModel @Inject constructor(
+    private val answerUseCases: AnswerUseCases,
     private val participantUseCases: ParticipantUseCases,
     private val questionUseCases: QuestionUseCases,
     savedStateHandle: SavedStateHandle,
@@ -39,8 +44,8 @@ class AddEditViewQuestionViewModel @Inject constructor(
     private val _currentQuestionId = mutableLongStateOf(-1L)
     val currentQuestionId: State<Long> = _currentQuestionId
 
-    private val _currentUid = mutableStateOf("")
-    val currentUid: State<String> = _currentUid
+    private val _currentParticipantUid = mutableStateOf("")
+    val currentParticipantUid: State<String> = _currentParticipantUid
 
     private val _description = mutableStateOf("")
     val description: State<String> = _description
@@ -54,6 +59,9 @@ class AddEditViewQuestionViewModel @Inject constructor(
     private val _selectedSubjects = mutableStateListOf<Subject>()
     val selectedSubjects: List<Subject> = _selectedSubjects
 
+    private val _state = mutableStateOf(AddEditViewQuestionState())
+    val state: State<AddEditViewQuestionState> = _state
+
     private val _subjects = enumValues<Subject>()
     val subjects = _subjects
 
@@ -62,39 +70,47 @@ class AddEditViewQuestionViewModel @Inject constructor(
 
     init {
         val currentParticipant = currentParticipant?.copy()
-        _currentUid.value = currentParticipant!!.uid
+        _currentParticipantUid.value = currentParticipant!!.uid
 
-        savedStateHandle.get<Long>("questionId")?.let { questionId ->
-            if (questionId != -1L) {
-                runBlocking {
-                    questionUseCases.getByIdUseCase(
-                        input = GetByIdUseCase.Input(
-                            id = questionId,
-                            participantUid = currentUid.value,
-                        )
-                    ).result.let {
-                        if (it.isSuccess) {
-                            it.getOrNull()!!.also { question ->
-                                _isOwner.value = question.participant!!.uid == currentUid.value
-                                _currentQuestionId.longValue = question.id
-                                _title.value = question.title
-                                _description.value = question.description
-                                _selectedSubjects.clear()
-                                _selectedSubjects.addAll(question.subjects)
-                            }
+        _currentQuestionId.longValue = savedStateHandle.get<Long>("questionId")!!
+
+        if (currentQuestionId.value != -1L) {
+            runBlocking {
+                questionUseCases.getByIdUseCase(
+                    input = GetByIdUseCase.Input(
+                        id = currentQuestionId.value,
+                        participantUid = currentParticipantUid.value,
+                    )
+                ).result.let {
+                    if (it.isSuccess) {
+                        it.getOrNull()!!.also { question ->
+                            _isOwner.value = question.participant!!.uid == currentParticipantUid.value
+                            _title.value = question.title
+                            _description.value = question.description
+                            _selectedSubjects.clear()
+                            _selectedSubjects.addAll(question.subjects)
                         }
                     }
                 }
+                getAnswers()
             }
         }
 
-        _isFavorited.value = currentParticipant.favoriteQuestions.any { it.id == _currentQuestionId.longValue }
+        _isFavorited.value =
+            currentParticipant.favoriteQuestions.any { it.id == currentQuestionId.value }
+        _state.value = state.value.copy(
+            likedAnswers = currentParticipant.likedAnswers
+        )
     }
 
     fun onEvent(event: AddEditViewQuestionEvent) {
         when (event) {
-            is AddEditViewQuestionEvent.Delete -> {
-                viewModelScope.launch { delete() }
+            is AddEditViewQuestionEvent.DeleteAnswer -> {
+                viewModelScope.launch { deleteAnswer(event.value) }
+            }
+
+            is AddEditViewQuestionEvent.DeleteQuestion -> {
+                viewModelScope.launch { deleteQuestion() }
             }
 
             is AddEditViewQuestionEvent.EnteredDescription -> {
@@ -121,22 +137,80 @@ class AddEditViewQuestionViewModel @Inject constructor(
                 }
             }
 
+            is AddEditViewQuestionEvent.LikeAnswer -> {
+                viewModelScope.launch { likeAnswer(event.value) }
+            }
+
+            is AddEditViewQuestionEvent.LoadState -> {
+
+            }
+
             is AddEditViewQuestionEvent.Save -> {
                 viewModelScope.launch { save() }
             }
         }
     }
 
-    private suspend fun delete() {
+    private suspend fun getAnswers() {
+        answerUseCases.getAllByQuestionUseCase(
+            input = GetAllByQuestionUseCase.Input(
+                id = currentQuestionId.value,
+                participantUid = currentParticipantUid.value
+            )
+        ).result.let { result ->
+            if (result.isSuccess) {
+                result.getOrNull()!!.let { answers ->
+                    _state.value = state.value.copy(
+                        answers = answers
+                    )
+                }
+            } else {
+                onEvent(StudyTalkEvent.EnteredExceptionMessage(result.exceptionOrNull()!!.message!!))
+            }
+        }
+    }
+
+    private suspend fun deleteAnswer(answerId: Long) {
+        handleResult(
+            result = answerUseCases.deleteUseCase(
+                input = br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.DeleteUseCase.Input(
+                    id = answerId,
+                    participantUid = currentParticipantUid.value
+                )
+            ).result,
+            message = UiText.StringResource(
+                R.string.generic_snackbar_message,
+                UiText.StringResource(R.string.answer),
+                UiText.StringResource(
+                    R.string.removed,
+                    UiText.StringResource(R.string.fem_gender)
+                )
+            )
+        )
+        val answers = state.value.answers.toMutableList()
+        answers.removeIf { it.id == answerId }
+        _state.value = state.value.copy(
+            answers = answers
+        )
+    }
+
+    private suspend fun deleteQuestion() {
         handleResult(
             result = questionUseCases.deleteUseCase(
                 input = DeleteUseCase.Input(
                     id = currentQuestionId.value,
-                    participantUid = currentUid.value
+                    participantUid = currentParticipantUid.value
                 )
             ).result,
             route = BaseScreens.QuestionsScreen.route,
-            message = UiText.StringResource(R.string.question_deleted_message)
+            message = UiText.StringResource(
+                R.string.generic_snackbar_message,
+                UiText.StringResource(R.string.question),
+                UiText.StringResource(
+                    R.string.removed,
+                    UiText.StringResource(R.string.fem_gender)
+                )
+            )
         )
     }
 
@@ -144,7 +218,7 @@ class AddEditViewQuestionViewModel @Inject constructor(
         handleResult(
             result = participantUseCases.changeAQuestionFavoriteStatusUseCase(
                 input = ChangeAQuestionFavoriteStatusUseCase.Input(
-                    participantUid = currentUid.value,
+                    participantUid = currentParticipantUid.value,
                     questionId = currentQuestionId.value
                 )
             ).result,
@@ -167,12 +241,52 @@ class AddEditViewQuestionViewModel @Inject constructor(
         _isFavorited.value = !isFavorited.value
     }
 
+    private suspend fun likeAnswer(answerId: Long) {
+        val likedAnswers = state.value.likedAnswers.toMutableList()
+        val message: UiText
+        likedAnswers.find { answer -> answer.id == answerId }.let { answer ->
+            if (answer != null) {
+                likedAnswers.remove(answer)
+                message = UiText.StringResource(
+                    R.string.generic_snackbar_message,
+                    UiText.StringResource(R.string.like),
+                    UiText.StringResource(
+                        R.string.removed,
+                        UiText.StringResource(R.string.fem_gender)
+                    )
+                )
+            } else {
+                likedAnswers.add(state.value.answers.first { it.id == answerId })
+                message = UiText.StringResource(
+                    R.string.generic_snackbar_message,
+                    UiText.StringResource(R.string.like),
+                    UiText.StringResource(
+                        R.string.added,
+                        UiText.StringResource(R.string.fem_gender)
+                    )
+                )
+            }
+        }
+        handleResult(
+            result = participantUseCases.changeAnAnswerLikeStatusUseCase(
+                input = ChangeAnAnswerLikeStatusUseCase.Input(
+                    participantUid = currentParticipantUid.value,
+                    answerId = answerId
+                )
+            ).result,
+            message = message
+        )
+        _state.value = state.value.copy(
+            likedAnswers = likedAnswers
+        )
+    }
+
     private suspend fun save() {
         if (currentQuestionId.value == -1L) {
             handleResult(
                 result = participantUseCases.doAQuestionUseCase(
                     input = DoAQuestionUseCase.Input(
-                        participantUid = currentUid.value,
+                        participantUid = currentParticipantUid.value,
                         title = title.value,
                         description = description.value,
                         subjects = selectedSubjects
@@ -189,7 +303,7 @@ class AddEditViewQuestionViewModel @Inject constructor(
                         title = title.value.let { it.ifBlank { null } },
                         description = description.value.let { it.ifBlank { null } },
                         subjects = selectedSubjects,
-                        participantUid = currentUid.value
+                        participantUid = currentParticipantUid.value
                     )
                 ).result,
                 route = BaseScreens.QuestionsScreen.route,

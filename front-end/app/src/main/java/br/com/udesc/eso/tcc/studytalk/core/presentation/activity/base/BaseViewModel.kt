@@ -54,9 +54,7 @@ class BaseViewModel @Inject constructor(
     }
 
     private suspend fun setupByCurrentUid() {
-        val currentUid = sharedPreferences.getString("current_uid", "")
-
-        currentUid?.let { uid ->
+        FirebaseAuth.getInstance().uid?.let { uid ->
             if (uid.isNotBlank()) {
                 administratorUseCases.getByUidUseCase(
                     br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.GetByUidUseCase.Input(
@@ -84,8 +82,6 @@ class BaseViewModel @Inject constructor(
     }
 
     private fun setupAdministratorMode(administrator: Administrator) {
-        saveAdministratorToSharedPreferences(administrator)
-
         _route.value = BaseScreens.InstitutionsScreen.route
 
         bottomNavigationItens = listOf(
@@ -111,8 +107,6 @@ class BaseViewModel @Inject constructor(
     }
 
     private fun setupParticipantMode(participant: Participant?) {
-        saveParticipantToSharedPreferences(participant)
-
         if (participant != null) {
             if (participant.institution != null) {
                 _route.value = BaseScreens.HomeScreen.route
@@ -120,7 +114,7 @@ class BaseViewModel @Inject constructor(
                 _route.value = BaseScreens.WaitingApproveScreen.route
             }
         } else {
-            _route.value = BaseScreens.CreateParticipantScreen.route
+            _route.value = BaseScreens.ProfileScreenWithoutBottomNavBar.route
         }
 
         bottomNavigationItens = listOf(
@@ -145,24 +139,8 @@ class BaseViewModel @Inject constructor(
         )
     }
 
-    private fun saveAdministratorToSharedPreferences(administrator: Administrator) {
-        sharedPreferences.edit().putString("current_mode", "administrator").apply()
-        val gson = Gson()
-        val administratorString = gson.toJson(administrator)
-        sharedPreferences.edit().putString("current_administrator", administratorString).apply()
-    }
-
-    private fun saveParticipantToSharedPreferences(participant: Participant?) {
-        sharedPreferences.edit().putString("current_mode", "participant").apply()
-        if (participant != null) {
-            val gson = Gson()
-            val participantString = gson.toJson(participant)
-            sharedPreferences.edit().putString("current_participant", participantString).apply()
-        }
-    }
-
     fun signOut() {
-        sharedPreferences.edit().putString("current_uid", "").apply()
         FirebaseAuth.getInstance().signOut()
+        _route.value = BaseScreens.InitialActivity.route
     }
 }

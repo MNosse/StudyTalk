@@ -13,14 +13,17 @@ import br.com.udesc.eso.tcc.studytalk.featureAdministrator.data.repository.Admin
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.repository.AdministratorRepository
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.AdministratorUseCases
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.CreateUseCase
+import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.GetByUidUseCase
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.dataSource.LocalAnswerDataSource
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.dataSource.RemoteAnswerDataSource
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.data.repository.AnswerRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.repository.AnswerRepository
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.AnswerUseCases
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.dataSource.LocalEnrollmentRequestDataSource
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.dataSource.RemoteEnrollmentRequestDataSource
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.data.repository.EnrollmentRequestRepositoryImpl
 import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.repository.EnrollmentRequestRepository
+import br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.useCase.EnrollmentRequestUseCases
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.LocalInstitutionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.dataSource.RemoteInstitutionDataSource
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.data.repository.InstitutionRepositoryImpl
@@ -276,6 +279,41 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideAnswerUseCases(repository: AnswerRepository): AnswerUseCases {
+        return AnswerUseCases(
+            deleteUseCase = br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.DeleteUseCase(
+                repository
+            ),
+            getAllByQuestionUseCase = br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.GetAllByQuestionUseCase(
+                repository
+            ),
+            getByIdUseCase = br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.GetByIdUseCase(
+                repository
+            ),
+            updateUseCase = br.com.udesc.eso.tcc.studytalk.featureAnswer.domain.useCase.UpdateUseCase(
+                repository
+            )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnrollmentRequestUseCases(repository: EnrollmentRequestRepository): EnrollmentRequestUseCases {
+        return EnrollmentRequestUseCases(
+            approveUseCase = br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.useCase.ApproveUseCase(
+                repository
+            ),
+            getAllByInstitutionUseCase = br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.useCase.GetAllByInstitutionUseCase(
+                repository
+            ),
+            reproveUseCase = br.com.udesc.eso.tcc.studytalk.featureEnrollmentRequest.domain.useCase.ReproveUseCase(
+                repository
+            )
+        )
+    }
+
+    @Provides
+    @Singleton
     fun provideInstitutionUseCases(repository: InstitutionRepository): InstitutionUseCases {
         return InstitutionUseCases(
             createUseCase = br.com.udesc.eso.tcc.studytalk.featureInstitution.domain.useCase.CreateUseCase(
@@ -300,7 +338,13 @@ class AppModule {
     @Singleton
     fun provideParticipantUseCases(repository: ParticipantRepository): ParticipantUseCases {
         return ParticipantUseCases(
+            answerAQuestionUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.AnswerAQuestionUseCase(
+                repository
+            ),
             changeAQuestionFavoriteStatusUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ChangeAQuestionFavoriteStatusUseCase(
+                repository
+            ),
+            changeAnAnswerLikeStatusUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ChangeAnAnswerLikeStatusUseCase(
                 repository
             ),
             createUseCase = br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.CreateUseCase(

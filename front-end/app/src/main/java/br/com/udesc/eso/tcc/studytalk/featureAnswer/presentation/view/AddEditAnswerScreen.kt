@@ -1,4 +1,4 @@
-package br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.view
+package br.com.udesc.eso.tcc.studytalk.featureAnswer.presentation.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -26,21 +27,27 @@ import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.St
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkScreen
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTextField
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTopAppBar
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.viewmodel.CreateParticipantEvent
-import br.com.udesc.eso.tcc.studytalk.featureParticipant.presentation.create.viewmodel.CreateParticipantViewModel
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.presentation.viewmodel.AddEditAnswerEvent
+import br.com.udesc.eso.tcc.studytalk.featureAnswer.presentation.viewmodel.AddEditAnswerViewModel
+import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.addEditViewInstitution.viewmodel.AddEditViewInstitutionEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CreateParticipantScreen(
+fun AddEditAnswerScreen(
     navController: NavController,
-    viewModel: CreateParticipantViewModel = hiltViewModel()
+    viewModel: AddEditAnswerViewModel = hiltViewModel()
 ) {
+    val editMode = viewModel.editMode.value
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
-            StudyTalkTopAppBar(title = stringResource(R.string.profile_top_app_bar_title))
+            StudyTalkTopAppBar(
+                title = stringResource(R.string.answer),
+                hasNavBack = true,
+                navBackAction = { navController.navigateUp() }
+            )
         },
         content = {
             StudyTalkScreen(
@@ -56,27 +63,13 @@ fun CreateParticipantScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     StudyTalkTextField(
-                        label = stringResource(R.string.name_label),
-                        value = viewModel.name.value,
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next
-                        ),
-                        onValueChange = {
-                            viewModel.onEvent(
-                                CreateParticipantEvent.EnteredName(
-                                    it
-                                )
-                            )
-                        }
-                    )
-                    StudyTalkTextField(
-                        label = stringResource(R.string.registration_code_label),
-                        value = viewModel.registrationCode.value,
-                        singleLine = true,
+                        label = stringResource(R.string.description_label),
+                        value = viewModel.description.value,
+                        singleLine = false,
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done
                         ),
@@ -87,12 +80,11 @@ fun CreateParticipantScreen(
                         ),
                         onValueChange = {
                             viewModel.onEvent(
-                                CreateParticipantEvent.EnteredRegistrationCode(
+                                AddEditAnswerEvent.EnteredDescription(
                                     it
                                 )
                             )
-                        },
-                        removeSpacer = true
+                        }
                     )
                 }
             }
@@ -100,11 +92,19 @@ fun CreateParticipantScreen(
         floatingActionButton = {
             StudyTalkFloatingActionButton(
                 iconVector = Icons.Filled.Check,
-                iconDescription = stringResource(R.string.participant_fab_content_description),
-                text = stringResource(R.string.add_institution_fab_text),
+                iconDescription = if (editMode) {
+                    stringResource(R.string.edit_institution_fab_text)
+                } else {
+                    stringResource(R.string.add_institution_fab_text)
+                },
+                text = if (editMode) {
+                    stringResource(R.string.edit_institution_fab_text)
+                } else {
+                    stringResource(R.string.add_institution_fab_text)
+                },
                 onClick = {
                     keyboardController?.hide()
-                    viewModel.onEvent(CreateParticipantEvent.Save)
+                    viewModel.onEvent(AddEditAnswerEvent.Save)
                 }
             )
         },

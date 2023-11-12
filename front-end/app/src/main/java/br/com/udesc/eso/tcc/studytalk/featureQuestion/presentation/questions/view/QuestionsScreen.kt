@@ -26,6 +26,7 @@ import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkFloatingActionButton
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkListItem
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkQuestion
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkScreen
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTopAppBar
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.viewmodel.QuestionsViewModel
@@ -61,13 +62,9 @@ fun QuestionsScreen(
                         .padding(16.dp)
                 ) {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        var index = 0
-                        val size = state.questions.size
                         items(state.questions) { question ->
-                            index++
-                            StudyTalkListItem(
-                                title = question.title,
-                                showDivider = index != size,
+                            StudyTalkQuestion(
+                                text = question.title,
                                 onClick = {
                                     navController.navigate(BaseScreens.AddEditViewQuestionScreen.route + "?questionId=${question.id}")
                                 }

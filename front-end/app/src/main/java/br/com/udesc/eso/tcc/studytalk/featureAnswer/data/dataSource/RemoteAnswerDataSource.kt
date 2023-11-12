@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface RemoteAnswerDataSource {
 
-    @DELETE("answes/{id}/")
+    @DELETE("answers/{id}/")
     suspend fun delete(
         @Path("id") id: Long,
         @Query("participantUid") participantUid: String

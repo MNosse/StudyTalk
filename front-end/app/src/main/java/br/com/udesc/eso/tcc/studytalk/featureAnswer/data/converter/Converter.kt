@@ -39,12 +39,16 @@ fun convertToModel(answer: AnswerApiModel): Answer {
         id = answer.id,
         description = answer.description,
         likeCount = answer.likeCount,
-        question = br.com.udesc.eso.tcc.studytalk.featureQuestion.data.converter.convertToModel(
-            answer.question
-        ),
-        participant = br.com.udesc.eso.tcc.studytalk.featureParticipant.data.converter.convertToModel(
-            answer.participant
-        )
+        question = answer.question?.let {
+            br.com.udesc.eso.tcc.studytalk.featureQuestion.data.converter.convertToModel(
+                answer.question
+            )
+        },
+        participant = answer.participant?.let {
+            br.com.udesc.eso.tcc.studytalk.featureParticipant.data.converter.convertToModel(
+                answer.participant
+            )
+        }
     )
 }
 
@@ -53,7 +57,7 @@ fun convertToRoomEntity(answer: AnswerApiModel): AnswerRoomEntity {
         id = answer.id,
         description = answer.description,
         likeCount = answer.likeCount,
-        questionId = answer.question.id,
-        participantId = answer.participant.id
+        questionId = answer.question!!.id,
+        participantId = answer.participant!!.id
     )
 }

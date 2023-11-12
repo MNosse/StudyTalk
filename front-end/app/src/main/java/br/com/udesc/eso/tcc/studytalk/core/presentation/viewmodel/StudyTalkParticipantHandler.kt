@@ -12,12 +12,17 @@ class StudyTalkParticipantHandler(
     private val _currentParticipant: Participant?
         get() {
             return runBlocking {
-                participantUseCases.getByUidUseCase(
-                    GetByUidUseCase.Input(
-                        participantToBeRetrievedUid = FirebaseAuth.getInstance().uid!!
-                    )
-                ).result.getOrNull()
+                FirebaseAuth.getInstance().uid?.let { uid ->
+                    participantUseCases.getByUidUseCase(
+                        GetByUidUseCase.Input(
+                            participantToBeRetrievedUid = uid
+                        )
+                    ).result.getOrNull()
+                }
             }
         }
-    val currentParticipant: Participant? = _currentParticipant
+    val currentParticipant: Participant?
+        get() {
+            return _currentParticipant
+        }
 }
