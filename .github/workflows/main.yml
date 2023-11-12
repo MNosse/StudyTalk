@@ -23,7 +23,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Change to back-end directory
-      run: cd back-end
+      run: cd ./back-end
 
     - name: Set execute permissions for gradlew
       run: chmod +x gradlew
