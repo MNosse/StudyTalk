@@ -22,13 +22,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
       
-    - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
-      
-    - name: Run the Gradle package task
-      uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
-      with:
-        arguments: -b ci.gradle package
+    - name: Run tests
+      run: ./back-end/gradlew clean test
+
+    - name: Build with Maven
+      run: ./back-end/gradlew clean build
 
     - name: Docker Login
       uses: docker/login-action@v3.0.0
@@ -40,7 +38,7 @@ jobs:
       uses: docker/build-push-action@v4.0.0
       with: 
         context: .
-        file: ./Dockerfile
+        file: ./back-end/Dockerfile
         push: true
         tags: |
           mateusnosse/studytalk:latest
