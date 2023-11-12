@@ -21,15 +21,18 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        
+    - name: Change to back-end directory
+      run: cd back-end
 
     - name: Set execute permissions for gradlew
-      run: chmod +x back-end/gradlew
+      run: chmod +x gradlew
       
     - name: Run tests
-      run: ./back-end/gradlew clean test
+      run: ./gradlew clean test
 
     - name: Build with Maven
-      run: ./back-end/gradlew clean build
+      run: ./gradlew clean build
 
     - name: Docker Login
       uses: docker/login-action@v3.0.0
@@ -41,7 +44,7 @@ jobs:
       uses: docker/build-push-action@v4.0.0
       with: 
         context: .
-        file: ./back-end/Dockerfile
+        file: ./Dockerfile
         push: true
         tags: |
           mateusnosse/studytalk:latest
