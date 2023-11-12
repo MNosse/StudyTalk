@@ -16,17 +16,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Change to back-end directory
+      run: cd ./back-end
+
     - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
         java-version: '17'
         distribution: 'temurin'
-        
-    - name: Change to back-end directory
-      run: cd ./back-end
-
-    - name: Set execute permissions for gradlew
-      run: chmod +x gradlew
       
     - name: Run tests
       run: ./gradlew clean test
