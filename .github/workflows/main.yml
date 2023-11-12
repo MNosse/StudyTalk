@@ -21,6 +21,9 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
+    - name: Set execute permissions for gradlew
+      run: chmod +x back-end/gradlew
       
     - name: Run tests
       run: ./back-end/gradlew clean test
