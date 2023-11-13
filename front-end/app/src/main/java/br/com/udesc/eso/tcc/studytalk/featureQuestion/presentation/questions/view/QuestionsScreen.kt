@@ -24,9 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkCardItem
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkFloatingActionButton
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkListItem
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkQuestion
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkScreen
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTopAppBar
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.questions.viewmodel.QuestionsViewModel
@@ -63,7 +62,7 @@ fun QuestionsScreen(
                 ) {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(state.questions) { question ->
-                            StudyTalkQuestion(
+                            StudyTalkCardItem(
                                 text = question.title,
                                 onClick = {
                                     navController.navigate(BaseScreens.AddEditViewQuestionScreen.route + "?questionId=${question.id}&backRoute=${BaseScreens.QuestionsScreen.route}")

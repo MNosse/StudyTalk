@@ -11,6 +11,7 @@ import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParti
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.GetByUidUseCase
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ParticipantUseCases
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,19 +22,34 @@ class WaitingApproveViewModel @Inject constructor(
     sharedPreferences: SharedPreferences,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
 ) : StudyTalkViewModel() {
+    private val currentParticipantUid: String
 
-    private val _currentUid = mutableStateOf("")
-    val currentUid: State<String> = _currentUid
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
 
     init {
-        _currentUid.value = studyTalkParticipantHandler.currentParticipant!!.uid
+        currentParticipantUid = studyTalkParticipantHandler.currentParticipant!!.uid
         viewModelScope.launch { checkApprovedState() }
     }
 
+    fun onEvent(event: WaitingApproveEvent) {
+        when (event) {
+            is WaitingApproveEvent.Reload -> {
+                viewModelScope.launch { checkApprovedState() }
+            }
+
+            is WaitingApproveEvent.SignOut -> {
+                FirebaseAuth.getInstance().signOut()
+                onEvent(StudyTalkEvent.EnteredRoute(BaseScreens.InitialActivity.route))
+            }
+        }
+    }
+
     private suspend fun checkApprovedState() {
+        _isLoading.value = true
         participantUseCases.getByUidUseCase(
             input = GetByUidUseCase.Input(
-                participantToBeRetrievedUid = currentUid.value
+                participantToBeRetrievedUid = currentParticipantUid
             )
         ).result.let {
             if (it.isSuccess) {
@@ -41,6 +57,7 @@ class WaitingApproveViewModel @Inject constructor(
                     onEvent(StudyTalkEvent.EnteredRoute(BaseScreens.HomeScreen.route))
                 }
             }
+            _isLoading.value = false
         }
     }
 

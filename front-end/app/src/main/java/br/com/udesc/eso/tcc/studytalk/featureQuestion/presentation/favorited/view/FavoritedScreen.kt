@@ -26,8 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkQuestion
-import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.favorited.viewmodel.FavoritedState
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkCardItem
 import br.com.udesc.eso.tcc.studytalk.featureQuestion.presentation.favorited.viewmodel.FavoritedViewModel
 
 @Composable
@@ -49,7 +48,7 @@ fun FavoritedScreen(
             if (questions.isNotEmpty()) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(questions) { question ->
-                        StudyTalkQuestion(
+                        StudyTalkCardItem(
                             text = question.title,
                             onClick = {
                                 navController.navigate(route =BaseScreens.AddEditViewQuestionScreen.route + "?questionId=${question.id}&backRoute=${BaseScreens.HomeScreen.route}")

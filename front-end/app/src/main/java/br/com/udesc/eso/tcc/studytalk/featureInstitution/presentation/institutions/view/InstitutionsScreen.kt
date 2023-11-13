@@ -34,8 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
+import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkCardItem
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkFloatingActionButton
-import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkListItem
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkScreen
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTopAppBar
 import br.com.udesc.eso.tcc.studytalk.featureInstitution.presentation.institutions.viewmodel.InstitutionsViewModel
@@ -73,8 +73,8 @@ fun InstitutionsScreen(
                         if (institutions.isNotEmpty()) {
                             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                                 items(institutions) { institution ->
-                                    StudyTalkListItem(
-                                        title = institution.name,
+                                    StudyTalkCardItem(
+                                        text = institution.name,
                                         onClick = {
                                             navController.navigate(BaseScreens.AddEditViewInstitutionScreen.route + "?institutionId=${institution.id}")
                                         }
@@ -85,7 +85,7 @@ fun InstitutionsScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(top = 16.dp),
+                                    .padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {

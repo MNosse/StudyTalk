@@ -8,9 +8,11 @@
     <string name="create">Cadastrar</string>
     <string name="edit">Editar</string>
     <string name="exclude">Excluir</string>
+    <string name="reload">Recarregar</string>
     <string name="report">Denunciar</string>
     <string name="reprove">Reprovar</string>
     <string name="save">Salvar</string>
+    <string name="signOut">Desconectar</string>
     
     <!-- Content Description -->
     <string name="answers_fab_content_description">Adicionar resposta</string>
@@ -26,6 +28,7 @@
     <string name="top_app_bar_dropdown_menu_item_report_content_description">Denunciar</string>
     <string name="top_app_bar_nav_back">Voltar</string>
     <string name="studytalk_logo_content_description">Logo do StudyTalk</string>
+    <string name="waiting_approve_description">Esperando aprovação</string>
 
     <!-- Created Message -->
     <string name="administrator_created_message">Administrador criado com sucesso.</string>
@@ -100,6 +103,7 @@
 
     <!-- State -->
     <string name="no_results">Sem resultados</string>
+    <string name="waiting_approve">Esperando sua solicitação de cadastro na instituição ser aprovada</string>
 
     <!-- TextField Labels -->
     <string name="description_label">Descrição</string>

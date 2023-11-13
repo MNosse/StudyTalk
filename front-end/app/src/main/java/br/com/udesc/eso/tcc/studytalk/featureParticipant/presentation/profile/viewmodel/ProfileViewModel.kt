@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.udesc.eso.tcc.studytalk.R
 import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base.BaseScreens
+import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkAdministratorHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkEvent
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkParticipantHandler
 import br.com.udesc.eso.tcc.studytalk.core.presentation.viewmodel.StudyTalkViewModel
@@ -20,32 +21,43 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val participantUseCases: ParticipantUseCases,
+    studyTalkAdministratorHandler: StudyTalkAdministratorHandler,
     studyTalkParticipantHandler: StudyTalkParticipantHandler
 ) : StudyTalkViewModel() {
+    private var currentAdministratorUid: String? = null
+    private var currentParticipantUid: String? = null
 
     private val _name = mutableStateOf("")
     val name: State<String> = _name
 
-    private val _currentParticipantId = mutableLongStateOf(-1L)
-    val currentParticipantId: State<Long> = _currentParticipantId
-
-    private val _currentUid = mutableStateOf("")
-    val currentUid: State<String> = _currentUid
+    private val _isAdministrator = mutableStateOf(false)
+    val isAdministrator: State<Boolean> = _isAdministrator
 
     private val _isEditMode = mutableStateOf(false)
     val isEditMode: State<Boolean> = _isEditMode
+
+    private val _isRegistred = mutableStateOf(false)
+    val isRegistred: State<Boolean> = _isRegistred
 
     private val _registrationCode = mutableStateOf("")
     val registrationCode: State<String> = _registrationCode
 
     init {
-        studyTalkParticipantHandler.currentParticipant?.let { participant ->
-            val currentParticipant = participant.copy()
-            _currentParticipantId.longValue = currentParticipant.id
-            _currentUid.value = currentParticipant.uid
-            _name.value = currentParticipant.name
-        } ?: {
-            _currentUid.value = FirebaseAuth.getInstance().uid!!
+        currentAdministratorUid = studyTalkAdministratorHandler.currentAdministrator?.uid
+        if (currentAdministratorUid != null) {
+            _isAdministrator.value = true
+            _name.value = "Administrador"
+        } else {
+            _isAdministrator.value = false
+            val currentParticipant = studyTalkParticipantHandler.currentParticipant
+            if (currentParticipant != null) {
+                currentParticipantUid = currentParticipant.uid
+                _isRegistred.value = true
+                _name.value = currentParticipant.name
+            } else {
+                currentParticipantUid = FirebaseAuth.getInstance().uid!!
+                _isRegistred.value = false
+            }
         }
     }
 
@@ -73,7 +85,7 @@ class ProfileViewModel @Inject constructor(
         participantUseCases.createUseCase(
             input = CreateUseCase.Input(
                 registrationCode = registrationCode.value,
-                uid = currentUid.value,
+                uid = currentParticipantUid!!,
                 name = name.value
             )
         ).result.let {

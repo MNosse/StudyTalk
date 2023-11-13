@@ -1,6 +1,5 @@
 package br.com.udesc.eso.tcc.studytalk.core.presentation.activity.base
 
-import android.content.SharedPreferences
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Forum
@@ -13,16 +12,15 @@ import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import br.com.udesc.eso.tcc.studytalk.core.domain.model.Privilege
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.BottomNavigationItem
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.model.Administrator
 import br.com.udesc.eso.tcc.studytalk.featureAdministrator.domain.useCase.AdministratorUseCases
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.model.Participant
 import br.com.udesc.eso.tcc.studytalk.featureParticipant.domain.useCase.ParticipantUseCases
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -30,8 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BaseViewModel @Inject constructor(
     private val administratorUseCases: AdministratorUseCases,
-    private val participantUseCases: ParticipantUseCases,
-    private val sharedPreferences: SharedPreferences
+    private val participantUseCases: ParticipantUseCases
 ) : ViewModel() {
 
     lateinit var bottomNavigationItens: List<BottomNavigationItem>
@@ -117,26 +114,42 @@ class BaseViewModel @Inject constructor(
             _route.value = BaseScreens.ProfileScreenWithoutBottomNavBar.route
         }
 
-        bottomNavigationItens = listOf(
-            BottomNavigationItem(
-                title = "Início",
-                route = BaseScreens.HomeScreen.route,
-                selectedIcon = Icons.Filled.Home,
-                unselectedIcon = Icons.Outlined.Home,
-            ),
-            BottomNavigationItem(
-                title = "Perguntas",
-                route = BaseScreens.QuestionsScreen.route,
-                selectedIcon = Icons.Filled.Forum,
-                unselectedIcon = Icons.Outlined.Forum,
-            ),
-            BottomNavigationItem(
-                title = "Perfil",
-                route = BaseScreens.ProfileScreen.route,
-                selectedIcon = Icons.Filled.Person,
-                unselectedIcon = Icons.Outlined.Person
-            ),
-        )
+        bottomNavigationItens = mutableListOf<BottomNavigationItem>().apply {
+            add(
+                BottomNavigationItem(
+                    title = "Início",
+                    route = BaseScreens.HomeScreen.route,
+                    selectedIcon = Icons.Filled.Home,
+                    unselectedIcon = Icons.Outlined.Home,
+                )
+            )
+            add(
+                BottomNavigationItem(
+                    title = "Perguntas",
+                    route = BaseScreens.QuestionsScreen.route,
+                    selectedIcon = Icons.Filled.Forum,
+                    unselectedIcon = Icons.Outlined.Forum,
+                )
+            )
+            if (participant?.privilege == Privilege.PRINCIPAL) {
+                add(
+                    BottomNavigationItem(
+                        title = "Participantes",
+                        route = BaseScreens.ParticipantsScreen.route,
+                        selectedIcon = Icons.Filled.Groups,
+                        unselectedIcon = Icons.Outlined.Groups,
+                    )
+                )
+            }
+            add(
+                BottomNavigationItem(
+                    title = "Perfil",
+                    route = BaseScreens.ProfileScreen.route,
+                    selectedIcon = Icons.Filled.Person,
+                    unselectedIcon = Icons.Outlined.Person
+                )
+            )
+        }
     }
 
     fun signOut() {

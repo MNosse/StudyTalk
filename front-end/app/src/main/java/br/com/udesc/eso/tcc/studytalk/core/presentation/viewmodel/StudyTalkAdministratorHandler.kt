@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 class StudyTalkAdministratorHandler(
     private val administratorUseCases: AdministratorUseCases
 ) {
-    private val _currentAdministrator: Administrator?
+    val currentAdministrator: Administrator?
         get() {
             return runBlocking {
                 FirebaseAuth.getInstance().uid?.let { uid ->
@@ -23,5 +23,4 @@ class StudyTalkAdministratorHandler(
                 }
             }
         }
-    val currentAdministrator: Administrator? = _currentAdministrator
 }

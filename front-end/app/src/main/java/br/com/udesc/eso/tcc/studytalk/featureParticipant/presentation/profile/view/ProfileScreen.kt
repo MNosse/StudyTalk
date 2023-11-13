@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,12 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import br.com.udesc.eso.tcc.studytalk.R
-import br.com.udesc.eso.tcc.studytalk.core.presentation.activity.initial.InitialScreens
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkFloatingActionButton
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkScreen
 import br.com.udesc.eso.tcc.studytalk.core.presentation.composable.components.StudyTalkTextField
@@ -46,8 +45,9 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val currentParticipantId = viewModel.currentParticipantId.value
+    val isAdministrator = viewModel.isAdministrator.value
     val isEditMode = viewModel.isEditMode.value
+    val isRegistred = viewModel.isRegistred.value
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -75,19 +75,17 @@ fun ProfileScreen(
                         label = stringResource(R.string.name_label),
                         value = viewModel.name.value,
                         singleLine = true,
-                        enabled = (currentParticipantId == -1L || isEditMode),
+                        enabled = (!isAdministrator && (!isRegistred || isEditMode)),
                         keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next
+                            imeAction = if (!isRegistred) {
+                                ImeAction.Next
+                            } else {
+                                ImeAction.Done
+                            }
                         ),
-                        onValueChange = {
-                            viewModel.onEvent(
-                                ProfileEvent.EnteredName(
-                                    it
-                                )
-                            )
-                        }
+                        onValueChange = { viewModel.onEvent(ProfileEvent.EnteredName(it)) }
                     )
-                    if (currentParticipantId == -1L) {
+                    if (!isAdministrator && !isRegistred) {
                         StudyTalkTextField(
                             label = stringResource(R.string.registration_code_label),
                             value = viewModel.registrationCode.value,
@@ -116,9 +114,10 @@ fun ProfileScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             ClickableText(
-                                text = AnnotatedString(text = "Desconectar"),
+                                text = AnnotatedString(text = stringResource(R.string.signOut)),
                                 style = TextStyle(
                                     textDecoration = TextDecoration.Underline,
+                                    textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.primary
                                 ),
                                 onClick = {
@@ -131,7 +130,7 @@ fun ProfileScreen(
             }
         },
         floatingActionButton = {
-            if (currentParticipantId == -1L || isEditMode) {
+            if (!isAdministrator && (!isRegistred || isEditMode)) {
                 StudyTalkFloatingActionButton(
                     iconVector = Icons.Filled.Check,
                     iconDescription = stringResource(R.string.participant_fab_content_description),
